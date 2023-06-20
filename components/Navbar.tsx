@@ -2,9 +2,10 @@ import { useAppStore } from "@/store";
 import { supabase } from "@/utils/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 export default function Navbar() {
-  const { session, setSession } = useAppStore();
+  const { setSession } = useAppStore();
   const router = useRouter();
 
   const [mounted, setMounted] = useState(false);
@@ -22,7 +23,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-primary-700 text-white flex justify-between px-3 py-5">
+    <nav className="bg-primary text-white flex justify-between px-3 py-5">
       <div>
         <img
           src="https://avatars.githubusercontent.com/u/76592198?s=200&v=4"
@@ -34,7 +35,7 @@ export default function Navbar() {
           }}
         />
       </div>
-      <button onClick={() => signOut()}>Log out</button>
+      <Button variant="secondary" onClick={() => signOut()}>Log Out</Button>
     </nav>
   );
 }
