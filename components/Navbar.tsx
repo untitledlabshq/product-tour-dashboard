@@ -3,6 +3,7 @@ import { supabase } from "@/utils/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export default function Navbar() {
   const { session, setSession } = useAppStore();
@@ -27,17 +28,19 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-blue-800 text-white flex justify-between p-5">
+    <nav className="bg-primary text-white flex justify-between p-5">
       <div>
-        <img
-          src="https://avatars.githubusercontent.com/u/76592198?s=200&v=4"
-          width="35"
-          height="35"
-          style={{
-            border: "1px solid white",
-            borderRadius: "6px",
-          }}
-        />
+        <Link href="/">
+          <img
+            src="https://avatars.githubusercontent.com/u/76592198?s=200&v=4"
+            width="35"
+            height="35"
+            style={{
+              border: "1px solid white",
+              borderRadius: "6px",
+            }}
+          />
+        </Link>
       </div>
       <Button variant="secondary" onClick={() => signOut()}>
         Log Out
