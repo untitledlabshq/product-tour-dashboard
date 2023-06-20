@@ -21,6 +21,10 @@ export default function Home() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+
+      if (!session) {
+        router.push("/");
+      }
     });
 
     setMounted(true);
@@ -32,13 +36,18 @@ export default function Home() {
     return (
       <>
         {mounted && (
-          <div className="md:w-1/2 mx-auto">
-            <Auth
-              supabaseClient={supabase}
-              appearance={{ theme: ThemeSupa }}
-              providers={["google"]}
-            />
-          </div>
+          <main className="min-h-screen grid place-items-center">
+            <div className="w-5/6 lg:w-[30%] mx-auto">
+              <h1 className="mt-3 text-2xl font-medium text-center">
+                Untitled Labs
+              </h1>
+              <Auth
+                supabaseClient={supabase}
+                appearance={{ theme: ThemeSupa }}
+                providers={["google"]}
+              />
+            </div>
+          </main>
         )}
       </>
     );

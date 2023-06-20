@@ -10,7 +10,6 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    console.log(session);
     setMounted(true);
   }, []);
 
@@ -23,9 +22,18 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-gray-100 flex justify-between px-3 py-5">
-      <h1>Heading</h1>
-      {mounted && <p>{session ? session.user.email : ""}</p>}
+    <nav className="bg-primary-700 text-white flex justify-between px-3 py-5">
+      <div>
+        <img
+          src="https://avatars.githubusercontent.com/u/76592198?s=200&v=4"
+          width="35"
+          height="35"
+          style={{
+            border: "1px solid white",
+            borderRadius: "6px",
+          }}
+        />
+      </div>
       <button onClick={() => signOut()}>Log out</button>
     </nav>
   );
