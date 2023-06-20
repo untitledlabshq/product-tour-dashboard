@@ -5,13 +5,17 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 export default function Navbar() {
-  const { setSession } = useAppStore();
+  const { session, setSession } = useAppStore();
   const router = useRouter();
 
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+
+    if (!session) {
+      router.push("/");
+    }
   }, []);
 
   async function signOut() {
@@ -23,7 +27,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-primary text-white flex justify-between px-3 py-5">
+    <nav className="bg-blue-800 text-white flex justify-between p-5">
       <div>
         <img
           src="https://avatars.githubusercontent.com/u/76592198?s=200&v=4"
@@ -35,7 +39,9 @@ export default function Navbar() {
           }}
         />
       </div>
-      <Button variant="secondary" onClick={() => signOut()}>Log Out</Button>
+      <Button variant="secondary" onClick={() => signOut()}>
+        Log Out
+      </Button>
     </nav>
   );
 }

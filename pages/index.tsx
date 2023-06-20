@@ -36,7 +36,7 @@ export default function Home() {
     return (
       <>
         {mounted && (
-          <main className="min-h-screen grid place-items-center">
+          <main className="min-h-screen grid place-items-center dark:bg-neutral-900 dark:text-white">
             <div className="w-5/6 lg:w-[30%] mx-auto">
               <h1 className="mt-3 text-2xl font-medium text-center">
                 Untitled Labs
@@ -45,6 +45,7 @@ export default function Home() {
                 supabaseClient={supabase}
                 appearance={{ theme: ThemeSupa }}
                 providers={["google"]}
+                theme="dark"
               />
             </div>
           </main>
