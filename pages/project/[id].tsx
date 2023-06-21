@@ -20,13 +20,17 @@ export default function ProjectId() {
             return (
               <div key={n} className="border border-gray-600 p-5 rounded-lg">
                 <h1 className="text-lg font-bold">Tour {n}</h1>
-                <p className="text-sm mt-1 text-gray-300">
-                    Home Page
+                <p className="text-sm mt-1 text-gray-300">Home Page</p>
+
+                <p className="text-xs mt-2 mb-1 p-2 bg-gray-600 rounded font-mono overflow-x-auto">
+                  https://www.untitledlabs.io/home
                 </p>
 
-                <p className="text-xs mt-2 mb-1 p-2 bg-gray-600 rounded font-mono overflow-x-auto">https://www.untitledlabs.io/homehttps://www.untitledlabs.io/home</p>
-
-                <p className="text-sm mt-3">8 Steps</p>
+                <div className="mt-4 space-x-1.5">
+                  <p className="pill">8 Steps</p>
+                  <p className="pill pill-success">Enabled</p>
+                  <p className="pill pill-warning">Disabled</p>
+                </div>
               </div>
             );
           })}

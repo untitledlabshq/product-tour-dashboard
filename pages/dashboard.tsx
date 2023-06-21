@@ -26,7 +26,7 @@ export default function Dashboard() {
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   </p>
 
-                  <p className="text-sm mt-3">8 tours</p>
+                  <p className="mt-3 pill">8 tours</p>
                 </div>
               </Link>
             );

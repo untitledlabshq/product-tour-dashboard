@@ -1,0 +1,12 @@
+
+.pill {
+    @apply border border-accent-foreground bg-accent-foreground/10 px-3 py-1.5 text-xs rounded-full inline-block;
+}
+
+.pill-success {
+    @apply border-green-500 text-green-500 bg-green-500/10;
+}
+
+.pill-warning {
+    @apply border-yellow-500 text-yellow-500 bg-yellow-500/10;
+}
