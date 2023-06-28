@@ -20,9 +20,9 @@ export default function Dashboard() {
           {Array.from(new Array(10).keys()).map((n) => {
             return (
               <Link key={n} href="/project/1">
-                <div className="border border-gray-600 p-5 rounded-lg">
+                <div className="border border-gray-600 bg-white dark:bg-neutral-600 p-5 rounded-lg">
                   <h1 className="text-lg font-bold">Untitled Labs</h1>
-                  <p className="text-sm mt-1 text-gray-300">
+                  <p className="text-sm mt-1 gray-text">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   </p>
 

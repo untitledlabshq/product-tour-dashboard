@@ -45,7 +45,6 @@ export default function Home() {
                 supabaseClient={supabase}
                 appearance={{ theme: ThemeSupa }}
                 providers={["google"]}
-                theme="dark"
               />
             </div>
           </main>
