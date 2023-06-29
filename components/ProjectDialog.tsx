@@ -48,7 +48,7 @@ export default function ProjectDialog() {
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
-        <Button variant="secondary">+ New Project</Button>
+        <Button>+ New Project</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
@@ -84,7 +84,7 @@ export default function ProjectDialog() {
                 className="col-span-3"
                 placeholder="BAYC Mint Page"
                 value={formData.desc}
-                onInput={handleChange}
+                onChange={handleChange}
               />
             </div>
           </div>

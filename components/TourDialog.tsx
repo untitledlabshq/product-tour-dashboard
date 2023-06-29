@@ -13,15 +13,17 @@ import { Label } from "@/components/ui/label";
 import { API_URL } from "@/constants";
 import { useAppStore } from "@/store";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function TourDialog() {
+  const router = useRouter();
   const store = useAppStore();
-
   const [open, setOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
+    desc: "",
     url: "",
   });
 
@@ -32,23 +34,36 @@ export default function TourDialog() {
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    await axios.post(API_URL + "/project", formData, {
-      headers: {
-        Authorization: "Bearer " + store.session.access_token,
-      },
-    });
+    try {
+      await axios.post(
+        API_URL + "/tour",
+        {
+          ...formData,
+          project_id: router.query.id,
+          active: false,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + store.session.access_token,
+          },
+        }
+      );
 
-    setOpen(false);
-    setFormData({
-      name: "",
-      url: "",
-    });
+      setOpen(false);
+      setFormData({
+        name: "",
+        desc: "",
+        url: "",
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
-        <Button variant="secondary">+ New Tour</Button>
+        <Button>+ New Tour</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
@@ -61,7 +76,7 @@ export default function TourDialog() {
           <div onSubmit={handleSubmit} className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Name
+                Name*
               </Label>
               <Input
                 id="name"
@@ -75,15 +90,30 @@ export default function TourDialog() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="url" className="text-right">
-                URL
+                URL*
               </Label>
               <Input
+                type="url"
                 id="url"
                 name="url"
                 className="col-span-3"
                 placeholder="https://www.untitledlabs.io/mint"
                 value={formData.url}
-                onInput={handleChange}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="desc" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="desc"
+                name="desc"
+                className="col-span-3"
+                placeholder="Primary Tour"
+                value={formData.desc}
+                onChange={handleChange}
               />
             </div>
           </div>
