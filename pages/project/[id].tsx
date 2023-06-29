@@ -3,6 +3,7 @@ import TourDialog from "@/components/TourDialog";
 import { API_URL } from "@/constants";
 import { useAppStore } from "@/store";
 import axios from "axios";
+import { ArrowLeft } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,7 +21,7 @@ export default function ProjectId() {
   });
 
   async function fetchProjectData() {
-    if (!project && router.query.id && store.session.access_token) {
+    if (router.query.id && store.session.access_token) {
       try {
         // Fetch Project Metadata
         const { data } = await axios.get(
@@ -56,23 +57,31 @@ export default function ProjectId() {
   return (
     <>
       <Head>
-        <title>Project {router.query.id}</title>
+        <title>Project - {project ? project.name : router.query.id}</title>
       </Head>
       <Navbar />
       {project ? (
         <main className="p-10">
-          <h1 className="font-bold text-xl">{project.name}</h1>
+          <div
+            className="flex space-x-1 cursor-pointer"
+            onClick={() => window.history.back()}
+          >
+            <ArrowLeft width={16} />
+            <span>Back</span>
+          </div>
+
+          <h1 className="mt-5 font-bold text-xl">{project.name}</h1>
           <p className="mt-2 text-sm gray-text">{project.desc}</p>
 
           <div className="mt-5 flex justify-between items-center">
             <h1 className="text-3xl">Tours</h1>
-            <TourDialog />
+            <TourDialog onCreate={fetchProjectData} />
           </div>
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-3">
             {tours.map((tour) => {
               return (
                 <Link key={tour.id} href={"/tour/" + tour.id}>
-                  <div className="border border-gray-600 p-5 rounded-lg">
+                  <div className="border border-gray-600 p-5 rounded-lg h-full">
                     <h1 className="text-lg font-bold">{tour.name}</h1>
                     <p className="text-sm mt-1 gray-text">{tour.desc}</p>
 
@@ -92,6 +101,10 @@ export default function ProjectId() {
                 </Link>
               );
             })}
+
+            {tours.length === 0 && (
+              <span className="gray-text">No tours created yet.</span>
+            )}
           </div>
 
           <h1 className="mt-10 text-3xl">Theme</h1>

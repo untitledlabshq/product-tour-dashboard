@@ -16,7 +16,11 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function TourDialog() {
+type Props = {
+  onCreate?: Function;
+};
+
+export default function TourDialog({ onCreate }: Props) {
   const router = useRouter();
   const store = useAppStore();
   const [open, setOpen] = useState(false);
@@ -48,6 +52,8 @@ export default function TourDialog() {
           },
         }
       );
+
+      onCreate?.();
 
       setOpen(false);
       setFormData({

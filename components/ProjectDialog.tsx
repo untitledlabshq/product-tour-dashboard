@@ -15,7 +15,11 @@ import { useAppStore } from "@/store";
 import axios from "axios";
 import { useState } from "react";
 
-export default function ProjectDialog() {
+type Props = {
+  onCreate?: Function;
+};
+
+export default function ProjectDialog({ onCreate }: Props) {
   const store = useAppStore();
 
   const [open, setOpen] = useState(false);
@@ -37,6 +41,8 @@ export default function ProjectDialog() {
         Authorization: "Bearer " + store.session.access_token,
       },
     });
+
+    onCreate?.();
 
     setOpen(false);
     setFormData({
