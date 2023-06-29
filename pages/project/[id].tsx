@@ -21,10 +21,10 @@ export default function ProjectId() {
 
         <div className="mt-5 flex justify-between items-center">
           <h1 className="text-3xl">Tours</h1>
-          <Button variant={"secondary"}>+ Add New</Button>
+          <Button variant={"secondary"}>+ New Tour</Button>
         </div>
         <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-3">
-          {Array.from(new Array(10).keys()).map((n) => {
+          {Array.from(new Array(5).keys()).map((n) => {
             return (
               <Link key={n} href="/tour/1">
                 <div className="border border-gray-600 p-5 rounded-lg">

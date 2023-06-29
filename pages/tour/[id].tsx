@@ -18,10 +18,7 @@ export default function TourId() {
       router.push("/");
     }
 
-    window.open(
-      "http://localhost:5173/?token=" + access_token,
-      "_blank"
-    );
+    window.open("http://localhost:5173/?token=" + access_token, "_blank");
   }
 
   return (
@@ -34,9 +31,12 @@ export default function TourId() {
       <main className="p-10">
         <div className="flex justify-between items-center">
           <div>
-            <div className="flex space-x-1">
+            <div
+              className="flex space-x-1 cursor-pointer"
+              onClick={() => window.history.back()}
+            >
               <ArrowLeft width={16} />
-              <span>Back to Project</span>
+              <span>Back</span>
             </div>
             <h1 className="mt-4 font-semibold text-2xl">Tour Name</h1>
             <p className="mt-1 text-sm gray-text">Tour description</p>
