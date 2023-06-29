@@ -15,14 +15,14 @@ import { useAppStore } from "@/store";
 import axios from "axios";
 import { useState } from "react";
 
-export default function ProjectDialog() {
+export default function TourDialog() {
   const store = useAppStore();
 
   const [open, setOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
-    desc: "",
+    url: "",
   });
 
   function handleChange(event: any) {
@@ -41,22 +41,21 @@ export default function ProjectDialog() {
     setOpen(false);
     setFormData({
       name: "",
-      desc: "",
+      url: "",
     });
   }
 
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
-        <Button variant="secondary">+ New Project</Button>
+        <Button variant="secondary">+ New Tour</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>New Project</DialogTitle>
+            <DialogTitle>New Tour</DialogTitle>
             <DialogDescription>
-              Each webapp is a project which contains multiple product tours for
-              its pages
+              Each Tour operates on a single page URL
             </DialogDescription>
           </DialogHeader>
           <div onSubmit={handleSubmit} className="grid gap-4 py-4">
@@ -67,7 +66,7 @@ export default function ProjectDialog() {
               <Input
                 id="name"
                 name="name"
-                placeholder="NFT Minting Site"
+                placeholder="Mint Page"
                 className="col-span-3"
                 value={formData.name}
                 onChange={handleChange}
@@ -75,15 +74,15 @@ export default function ProjectDialog() {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="desc" className="text-right">
-                Description
+              <Label htmlFor="url" className="text-right">
+                URL
               </Label>
               <Input
-                id="desc"
-                name="desc"
+                id="url"
+                name="url"
                 className="col-span-3"
-                placeholder="BAYC Mint Page"
-                value={formData.desc}
+                placeholder="https://www.untitledlabs.io/mint"
+                value={formData.url}
                 onInput={handleChange}
               />
             </div>

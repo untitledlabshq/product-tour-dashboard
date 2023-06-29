@@ -1,13 +1,29 @@
 import Navbar from "@/components/Navbar";
 import ProjectDialog from "@/components/ProjectDialog";
+import { API_URL } from "@/constants";
+import { useAppStore } from "@/store";
+import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
-  const [mounted, setMounted] = useState(false);
+  const store = useAppStore();
+  const [projects, setProjects] = useState([]);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    if (projects.length === 0 && store.session) {
+      axios
+        .get(API_URL + "/project/user/" + store.session.user.id, {
+          headers: {
+            Authorization: "Bearer " + store.session.access_token,
+          },
+        })
+        .then((response) => {
+          setProjects(response.data);
+        });
+    }
+  }, []);
 
   return (
     <main>
@@ -18,10 +34,11 @@ export default function Dashboard() {
       <div className="pt-12 px-8 md:px-12">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl">Your Projects</h1>
-          {mounted && <ProjectDialog />}
+          <ProjectDialog />
         </div>
 
         <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 2xl:grid-cols-5 gap-3">
+          {projects}
           {Array.from(new Array(10).keys()).map((n) => {
             return (
               <Link key={n} href="/project/1">
