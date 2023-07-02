@@ -73,6 +73,16 @@ export default function ProjectId() {
           <h1 className="mt-5 font-bold text-xl">{project.name}</h1>
           <p className="mt-2 text-sm gray-text">{project.desc}</p>
 
+          <h2 className="mt-5 font-semibold">Website's Script</h2>
+          <p className="text-sm gray-text">Include this script in your website to initialize the product tour</p>
+          <pre className="w-auto inline-block text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-gray-600 rounded font-mono overflow-x-auto">
+              &lt;script type="text/javascript" src="https://untitledlabs.io/productTour.js"&gt;&lt;/script&gt;
+            <br />
+              &lt;script type="text/javascript"&gt;<br />
+                UntitledProductTour.init("KEY_abcxyz123789") <br />
+              &lt;/script&gt; <br />
+          </pre>
+
           <div className="mt-5 flex justify-between items-center">
             <h1 className="text-3xl">Tours</h1>
             <TourDialog onCreate={fetchProjectData} />
