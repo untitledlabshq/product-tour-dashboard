@@ -15,6 +15,9 @@ export default function TourId() {
 
   const [tour, setTour] = useState(null as any);
 
+  // Loading State Mapping for form controls
+  const [loading, setLoading] = useState({} as any);
+
   function editSite() {
     // Open Site for Editing
     const access_token = store.session.access_token;
@@ -28,7 +31,7 @@ export default function TourId() {
 
   useEffect(() => {
     fetchTourData();
-  }, []);
+  }, [router.query]);
 
   async function fetchTourData() {
     if (router.query.id)
@@ -40,6 +43,31 @@ export default function TourId() {
       } catch (e) {
         console.error(e);
       }
+  }
+
+  async function updateActive(value: boolean) {
+    if (router.query.id) {
+      try {
+        setLoading({ enabled: true });
+        await axios.patch(
+          API_URL + "/tour/" + router.query.id,
+          {
+            active: value,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + store.session.access_token,
+            },
+          }
+        );
+
+        setTour({ ...tour, active: value });
+        setLoading({ enabled: false });
+      } catch (e) {
+        setLoading({ enabled: false });
+        console.error(e);
+      }
+    }
   }
 
   return (
@@ -59,7 +87,14 @@ export default function TourId() {
                 <ArrowLeft width={16} />
                 <span>Back</span>
               </div>
-              <h1 className="mt-4 font-semibold text-2xl">{tour.name}</h1>
+              <div className="mt-4">
+                {tour.active ? (
+                  <p className="pill pill-success">Enabled</p>
+                ) : (
+                  <p className="pill pill-warning">Disabled</p>
+                )}
+              </div>
+              <h1 className="mt-2 font-semibold text-2xl">{tour.name}</h1>
               <p className="mt-1 text-sm gray-text">{tour.desc}</p>
               <p className="text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-gray-600 rounded font-mono overflow-x-auto">
                 {tour.url}
@@ -67,7 +102,7 @@ export default function TourId() {
             </div>
 
             <div>
-              <Button onClick={() => editSite()}>Edit</Button>
+              <Button onClick={() => editSite()}>Edit Steps</Button>
             </div>
           </div>
 
@@ -96,7 +131,12 @@ export default function TourId() {
                   </label>
                   <p className="text-sm gray-text">For site visitors</p>
                 </div>
-                <Switch id="dev-tooltip" checked={tour.active} />
+                <Switch
+                  id="dev-tooltip"
+                  checked={tour.active}
+                  onCheckedChange={(value) => updateActive(value)}
+                  disabled={loading.enabled}
+                />
               </div>
 
               <div className="flex justify-between">

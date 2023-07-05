@@ -18,7 +18,7 @@ export default function ProjectId() {
 
   useEffect(() => {
     fetchProjectData();
-  });
+  }, [router.query]);
 
   async function fetchProjectData() {
     if (router.query.id && store.session.access_token) {
@@ -74,13 +74,17 @@ export default function ProjectId() {
           <p className="mt-2 text-sm gray-text">{project.desc}</p>
 
           <h2 className="mt-5 font-semibold">Website's Script</h2>
-          <p className="text-sm gray-text">Include this script in your website to initialize the product tour</p>
+          <p className="text-sm gray-text">
+            Include this script in your website to initialize the product tour
+          </p>
           <pre className="w-auto inline-block text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-gray-600 rounded font-mono overflow-x-auto">
-              &lt;script type="text/javascript" src="https://untitledlabs.io/productTour.js"&gt;&lt;/script&gt;
+            &lt;script type="text/javascript"
+            src="https://untitledlabs.io/productTour.js"&gt;&lt;/script&gt;
             <br />
-              &lt;script type="text/javascript"&gt;<br />
-                UntitledProductTour.init("KEY_abcxyz123789") <br />
-              &lt;/script&gt; <br />
+            &lt;script type="text/javascript"&gt;
+            <br />
+            UntitledProductTour.init("KEY_abcxyz123789") <br />
+            &lt;/script&gt; <br />
           </pre>
 
           <div className="mt-5 flex justify-between items-center">
@@ -100,7 +104,14 @@ export default function ProjectId() {
                     </p>
 
                     <div className="mt-4 space-x-1.5">
-                      <p className="pill">8 Steps</p>
+                      {tour.steps ? (
+                        <p className="pill">
+                          {tour.steps.length} Step
+                          {tour.steps.length > 1 && "s"}
+                        </p>
+                      )
+                      : <p className="pill">No Steps</p>
+                      }
                       {tour.active ? (
                         <p className="pill pill-success">Enabled</p>
                       ) : (
