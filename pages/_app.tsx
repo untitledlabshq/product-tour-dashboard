@@ -18,12 +18,15 @@ export default function App({ Component, pageProps }: AppProps) {
       // Check if session is expired, get new one
       supabase.auth.getSession().then(async (data) => {
         const expiresAt = data.data.session?.expires_at!;
+
+        // Consider expiry as half of expiresAt time since it somehow stops working beforehand
         const hasExpired =
-          new Date().getTime() > new Date(expiresAt * 1000).getTime();
+          new Date().getTime() > new Date((expiresAt * 1000) / 2).getTime();
 
         if (hasExpired) {
           const newSession = await supabase.auth.refreshSession();
           console.log({ newSession });
+          store.setSession(newSession.data.session);
         }
       });
     }

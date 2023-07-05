@@ -79,7 +79,7 @@ export default function ProjectId() {
           </p>
           <pre className="w-auto inline-block text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-gray-600 rounded font-mono overflow-x-auto">
             &lt;script type="text/javascript"
-            src="https://untitledlabs.io/productTour.js"&gt;&lt;/script&gt;
+            src="https://untitledlabs.io/productTour.js" defer&gt;&lt;/script&gt;
             <br />
             &lt;script type="text/javascript"&gt;
             <br />

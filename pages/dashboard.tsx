@@ -14,7 +14,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [store.session]);
 
   function fetchProjects() {
     if (store.session) {

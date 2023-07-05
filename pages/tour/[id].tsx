@@ -26,7 +26,13 @@ export default function TourId() {
       router.push("/");
     }
 
-    window.open("http://localhost:5173/?token=" + access_token, "_blank");
+    const adminUrl =
+      tour.url +
+      (!(tour.url as string).endsWith("/") ? "/" : "") +
+      "?tourToken=" +
+      access_token;
+
+    window.open(adminUrl, "_blank");
   }
 
   useEffect(() => {
@@ -46,7 +52,8 @@ export default function TourId() {
   }
 
   async function updateActive(value: boolean) {
-    if (router.query.id) {
+    if (router.query.id && store.session) {
+      console.log(store.session)
       try {
         setLoading({ enabled: true });
         await axios.patch(
@@ -139,7 +146,7 @@ export default function TourId() {
                 />
               </div>
 
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <div>
                   <label htmlFor="dev-tooltip" className="font-semibold">
                     Developer-friendly element names
@@ -147,7 +154,7 @@ export default function TourId() {
                   <p className="text-sm gray-text">In Admin mode, show </p>
                 </div>
                 <Switch id="dev-tooltip" />
-              </div>
+              </div> */}
             </div>
           </div>
         </main>
