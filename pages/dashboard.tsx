@@ -54,7 +54,16 @@ export default function Dashboard() {
                   <h1 className="text-lg font-bold">{project.name}</h1>
                   <p className="text-sm mt-1 gray-text">{project.desc}</p>
 
-                  <p className="mt-3 pill">8 tours</p>
+                  <div className="mt-3">
+                    {project.tour_count ? (
+                      <p className="pill">
+                        {project.tour_count} Tour
+                        {project.tour_count > 1 && "s"}
+                      </p>
+                    ) : (
+                      <p className="pill">No Tours</p>
+                    )}
+                  </div>
                 </div>
               </Link>
             );

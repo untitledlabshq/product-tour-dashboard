@@ -110,8 +110,14 @@ export default function TourId() {
               </p>
             </div>
 
-            <div>
-              <Button onClick={() => editSite()}>Edit Steps</Button>
+            <div className="space-x-2">
+              <Button
+                variant={"link"}
+                onClick={() => window.open(tour.url, "_blank")}
+              >
+                Visit Page
+              </Button>
+              <Button variant={"default"} onClick={() => editSite()}>Edit Steps</Button>
             </div>
           </div>
 
@@ -124,7 +130,9 @@ export default function TourId() {
                     <h2>{step.title}</h2>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(step.text.replace("autoplay", "")),
+                        __html: DOMPurify.sanitize(
+                          step.text.replace("autoplay", "")
+                        ),
                       }}
                     ></div>
                   </div>
