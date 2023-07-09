@@ -124,7 +124,7 @@ export default function TourId() {
                     <h2>{step.title}</h2>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(step.text),
+                        __html: DOMPurify.sanitize(step.text.replace("autoplay", "")),
                       }}
                     ></div>
                   </div>
