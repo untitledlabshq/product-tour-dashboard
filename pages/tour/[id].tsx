@@ -8,6 +8,7 @@ import { useAppStore } from "@/store";
 import { useEffect, useState } from "react";
 import { API_URL } from "@/constants";
 import axios from "axios";
+import * as DOMPurify from "dompurify";
 
 export default function TourId() {
   const router = useRouter();
@@ -122,7 +123,9 @@ export default function TourId() {
                   <div className="step-card">
                     <h2>{step.title}</h2>
                     <div
-                      dangerouslySetInnerHTML={{ __html: step.text }}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(step.text),
+                      }}
                     ></div>
                   </div>
                 ))}
