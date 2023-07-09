@@ -30,7 +30,9 @@ export default function TourId() {
       tour.url +
       (!(tour.url as string).endsWith("/") ? "/" : "") +
       "?tourToken=" +
-      access_token;
+      access_token +
+      "&tourId=" +
+      router.query.id;
 
     window.open(adminUrl, "_blank");
   }
@@ -53,7 +55,6 @@ export default function TourId() {
 
   async function updateActive(value: boolean) {
     if (router.query.id && store.session) {
-      console.log(store.session)
       try {
         setLoading({ enabled: true });
         await axios.patch(
@@ -115,16 +116,20 @@ export default function TourId() {
 
           <div className="mt-5 p-5 border rounded-lg">
             <h1 className="font-semibold">Steps</h1>
-            <div className="steps mt-3">
-              <div className="step-card">
-                <h3>title</h3>
-                <p>text</p>
+            {tour.steps ? (
+              <div className="steps mt-3">
+                {tour.steps.map((step: any) => (
+                  <div className="step-card">
+                    <h2>{step.title}</h2>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: step.text }}
+                    ></div>
+                  </div>
+                ))}
               </div>
-              <div className="step-card">
-                <h3>title</h3>
-                <p>text</p>
-              </div>
-            </div>
+            ) : (
+              <>No steps found yet. Add some!</>
+            )}
           </div>
 
           <div className="mt-5 p-5 border rounded-lg">
