@@ -49,9 +49,24 @@ export default function TourId() {
         console.log(data);
 
         setTour(data[0]);
+
+        fetchAnalytics();
       } catch (e) {
         console.error(e);
       }
+  }
+
+  async function fetchAnalytics() {
+    if (router.query.id) {
+      try {
+        const { data } = await axios.get(
+          API_URL + "/visitor/tour/" + router.query.id
+        );
+        console.log("Visitor data", data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }
 
   async function updateActive(value: boolean) {
@@ -117,7 +132,9 @@ export default function TourId() {
               >
                 Visit Page
               </Button>
-              <Button variant={"default"} onClick={() => editSite()}>Edit Steps</Button>
+              <Button variant={"default"} onClick={() => editSite()}>
+                Edit Steps
+              </Button>
             </div>
           </div>
 

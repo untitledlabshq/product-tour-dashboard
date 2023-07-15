@@ -14,6 +14,9 @@ import { API_URL } from "@/constants";
 import { useAppStore } from "@/store";
 import axios from "axios";
 import { useState } from "react";
+import PrimaryButton from "./PrimaryButton";
+
+import PlusIcon from '@/assets/icons/Plus.svg'
 
 type Props = {
   onCreate?: Function;
@@ -54,7 +57,9 @@ export default function ProjectDialog({ onCreate }: Props) {
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
-        <Button>+ New Project</Button>
+        <PrimaryButton>
+          New Project &nbsp; <img src={PlusIcon.src} width="18" />
+        </PrimaryButton>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>

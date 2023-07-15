@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import Logo from "@/assets/TooltipLogo.svg";
+import PrimaryButton from "./PrimaryButton";
 
 export default function Navbar() {
   const { session, setSession } = useAppStore();
@@ -28,23 +30,17 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-primary text-white flex justify-between p-5">
+    <nav className="bg-primary dark:bg-gray-900 text-white flex justify-between items-center py-3 px-10">
       <div>
         <Link href="/">
           <img
-            src="https://avatars.githubusercontent.com/u/76592198?s=200&v=4"
-            width="35"
-            height="35"
-            style={{
-              border: "1px solid white",
-              borderRadius: "6px",
-            }}
+            src={Logo.src}
           />
         </Link>
       </div>
-      <Button variant="secondary" onClick={() => signOut()}>
+      <PrimaryButton className="px-4" variant="secondary" onClick={() => signOut()}>
         Log Out
-      </Button>
+      </PrimaryButton>
     </nav>
   );
 }

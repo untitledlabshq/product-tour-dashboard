@@ -39,7 +39,7 @@ body {
  
     --ring: 215 20.2% 65.1%;
  
-    --radius: 0.5rem;
+    --radius: 0.7rem;
   }
  
   .dark {
@@ -58,10 +58,10 @@ body {
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
  
-    --primary: 210 40% 98%;
+    --primary: 250, 100%, 67%, 1;
     --primary-foreground: 222.2 47.4% 11.2%;
  
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 250, 71%, 55%, 1;
     --secondary-foreground: 210 40% 98%;
  
     --accent: 217.2 32.6% 17.5%;
