@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { API_URL } from "@/constants";
 import axios from "axios";
 import * as DOMPurify from "dompurify";
+import { updateTourActive } from "@/utils/api";
 
 export default function TourId() {
   const router = useRouter();
@@ -73,16 +74,11 @@ export default function TourId() {
     if (router.query.id && store.session) {
       try {
         setLoading({ enabled: true });
-        await axios.patch(
-          API_URL + "/tour/" + router.query.id,
-          {
-            active: value,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + store.session.access_token,
-            },
-          }
+
+        await updateTourActive(
+          router.query.id as string,
+          value,
+          store.session.access_token
         );
 
         setTour({ ...tour, active: value });

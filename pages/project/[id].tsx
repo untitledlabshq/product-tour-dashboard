@@ -6,9 +6,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
 import { API_URL, themeOptions } from "@/constants";
 import { useAppStore } from "@/store";
 import { ThemeOption } from "@/types";
+import { updateTourActive } from "@/utils/api";
 import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import Head from "next/head";
@@ -19,39 +21,75 @@ import { ColorResult, SketchPicker } from "react-color";
 
 type Tab = "tour" | "settings";
 
-function TourGrid({ tours }: { tours: any }) {
+function TourGrid({
+  tours,
+  refresh,
+}: {
+  tours: any;
+  refresh: () => Promise<void>;
+}) {
+  const [loading, setLoading] = useState({} as Record<string, boolean>);
+  const router = useRouter();
+  const store = useAppStore();
+
+  async function updateActive(id: string, value: boolean) {
+    if (router.query.id && store.session) {
+      const key = "enabled-" + id;
+
+      try {
+        setLoading({ [key]: true });
+
+        await updateTourActive(id as string, value, store.session.access_token);
+
+        // Fetch tours again
+        await refresh();
+
+        setLoading({ [key]: false });
+      } catch (e) {
+        setLoading({ [key]: false });
+        console.error(e);
+      }
+    }
+  }
+
   return (
     <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 2xl:grid-cols-4 gap-3">
       {tours.map((tour: any) => {
         return (
-          <Link key={tour.id} href={"/tour/" + tour.id}>
-            <div className="flex flex-col justify-between border border-gray-800 bg-primary-purple p-5 rounded-lg h-full">
-              <div>
+          <div
+            key={tour.id}
+            className="flex flex-col justify-between border border-gray-800 bg-primary-purple p-5 rounded-lg h-full cursor-pointer"
+            onClick={() => router.push("/tour/" + tour.id)}
+          >
+            <div>
+              <div className="flex justify-between items-center">
                 <h1 className="text-lg font-bold">{tour.name}</h1>
-                <p className="text-sm mt-1 gray-text">{tour.desc}</p>
-
-                <p className="text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded-full font-mono overflow-x-auto">
-                  {tour.url}
-                </p>
+                <Switch
+                  id={"enabled-" + tour.id}
+                  checked={tour.active}
+                  onCheckedChange={(value) => updateActive(tour.id, value)}
+                  disabled={loading["enabled-" + tour.id]}
+                  onClick={(e) => e.stopPropagation()}
+                />
               </div>
+              <p className="text-sm mt-1 gray-text">{tour.desc}</p>
 
-              <div className="mt-4 space-x-1.5">
-                {tour.steps ? (
-                  <p className="pill">
-                    {tour.steps.length} Step
-                    {tour.steps.length > 1 && "s"}
-                  </p>
-                ) : (
-                  <p className="pill border-gray-500">No Steps</p>
-                )}
-                {tour.active ? (
-                  <p className="pill pill-success">Enabled</p>
-                ) : (
-                  <p className="pill pill-warning">Disabled</p>
-                )}
-              </div>
+              <p className="text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded-full font-mono overflow-x-auto">
+                {tour.url}
+              </p>
             </div>
-          </Link>
+
+            <div className="mt-4 space-x-1.5">
+              {tour.steps ? (
+                <p className="pill">
+                  {tour.steps.length} Step
+                  {tour.steps.length > 1 && "s"}
+                </p>
+              ) : (
+                <p className="pill border-gray-500">No Steps</p>
+              )}
+            </div>
+          </div>
         );
       })}
 
@@ -185,7 +223,7 @@ export default function ProjectId() {
 
         console.log({ tourData });
 
-        setTours(tourData);
+        setTours(tourData.sort((a: any, b: any) => (b.active ? 1 : -1)));
       } catch (e: any) {
         setError("An error occurred. " + e.message);
       }
@@ -265,7 +303,7 @@ export default function ProjectId() {
           </div>
 
           {tab === "tour" ? (
-            <TourGrid tours={tours} />
+            <TourGrid tours={tours} refresh={fetchProjectData} />
           ) : (
             <TourSettings
               formState={formState}
