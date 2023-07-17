@@ -50,7 +50,7 @@ export default function Dashboard() {
           {projects.map((project: any) => {
             return (
               <Link key={project.id} href={"/project/" + project.id}>
-                <div className="border border-gray-600 bg-white dark:bg-gray-900 p-5 rounded-lg h-full">
+                <div className="border border-gray-800 bg-white dark:bg-primary-purple p-5 rounded-lg h-full">
                   <h1 className="text-lg font-bold">{project.name}</h1>
                   <p className="text-sm mt-1 gray-text">{project.desc}</p>
 
