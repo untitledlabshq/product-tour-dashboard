@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ColorResult, SketchPicker } from "react-color";
+import { Pencil1Icon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 type Tab = "tour" | "settings";
 
@@ -111,14 +112,17 @@ function TourSettings({
   setColor: (id: string, color: ColorResult) => void;
   updateTheme: () => void;
 }) {
+  // Get the current value somehow
+  const [mode, setMode] = useState("light" as "light" | "dark");
+
   return (
-    <>
-      <div className="mt-5 p-5 border rounded-lg">
-        <h2 className="font-semibold">Website's Script</h2>
-        <p className="text-sm gray-text">
+    <div className="mt-5 md:grid grid-cols-3 gap-5">
+      <div className="p-4 col-span-1 border rounded-lg bg-primary-purple">
+        <h2 className="font-semibold text-lg">Website's Script</h2>
+        <p className="mt-0.5 text-sm gray-text">
           Include this script in your website to initialize the product tour
         </p>
-        <pre className="w-auto inline-block text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-gray-600 rounded font-mono overflow-x-auto">
+        <p className="w-auto inline-block text-xs mt-4 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded font-mono overflow-x-auto">
           &lt;script type="text/javascript"
           src="https://untitledlabs.io/productTour.js"&gt;&lt;/script&gt;
           <br />
@@ -126,17 +130,17 @@ function TourSettings({
           <br />
           ProductTour.init("{project.id}") <br />
           &lt;/script&gt; <br />
-        </pre>
+        </p>
       </div>
 
-      <div className="mt-5 p-5 border rounded-lg">
-        <h2 className="font-semibold">Theme</h2>
-        <p className="text-sm gray-text">
+      <div className="p-4 col-span-2 border rounded-lg bg-primary-purple">
+        <h2 className="font-semibold text-lg">Theme</h2>
+        <p className="mt-0.5 text-sm gray-text">
           Reflected in all the tours within this project
         </p>
 
-        <div className="mt-5 space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 gap-10">
-          {themeOptions.map((item) => (
+        <div className="mt-6 space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 gap-10">
+          {/* {themeOptions.map((item) => (
             <div key={item.id} className="flex justify-between items-center">
               <label className="font-medium text-sm mb-1">{item.label}</label>
               <Popover>
@@ -162,14 +166,84 @@ function TourSettings({
                 </PopoverContent>
               </Popover>
             </div>
-          ))}
+          ))} */}
         </div>
 
-        <Button className="mt-5" onClick={updateTheme}>
-          Save theme
-        </Button>
+        <div className="w-full md:grid md:grid-cols-4 gap-5">
+          {/* Left */}
+          <div className="col-span-1 w-full">
+            <h2 className="font-medium text-sm">Tooltip Color</h2>
+            <Popover>
+              <PopoverTrigger>
+                <div className="mt-2 flex items-center justify-around p-2 bg-primary-dark w-40">
+                  <div
+                    className="w-6 h-6 border border-white/50 rounded"
+                    style={{
+                      background: formState["primaryColor"]
+                        ? formState["primaryColor"].value
+                        : "black",
+                    }}
+                  ></div>
+                  <p className="text-sm">
+                    {formState["primaryColor"]
+                      ? formState["primaryColor"].value
+                      : "No color"}
+                  </p>
+                  <span>
+                    <Pencil1Icon />
+                  </span>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <SketchPicker
+                  color={formState["primaryColor"]?.value ?? ""}
+                  onChange={(color) => setColor("primaryColor", color)}
+                  styles={{
+                    default: {
+                      picker: {
+                        backgroundColor: "hsl(222.2 84% 4.9%)",
+                        color: "black",
+                      },
+                    },
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+
+            <h2 className="mt-5 font-medium text-sm">Appearance</h2>
+            <div className="p-1 bg-primary-dark rounded-lg w-40">
+              <div
+                className={
+                  "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer transition " +
+                  (mode === "dark" ? "border bg-primary-purple" : "text-gray-400 hover:text-gray-300")
+                }
+                onClick={() => setMode('dark')}
+              >
+                <MoonIcon />
+                <span className="text-sm">Dark Mode</span>
+              </div>
+              <div
+                className={
+                  "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer " +
+                  (mode === "light" ? "border bg-primary-purple" : "text-gray-400 hover:text-gray-300")
+                }
+                onClick={() => setMode('light')}
+              >
+                <SunIcon />
+                <span className="text-sm">Light Mode</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right */}
+          <div className="col-span-3 border">rr</div>
+        </div>
       </div>
-    </>
+
+      <Button className="mt-5" onClick={updateTheme}>
+        Save theme
+      </Button>
+    </div>
   );
 }
 
