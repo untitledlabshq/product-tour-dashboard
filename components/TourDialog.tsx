@@ -15,6 +15,8 @@ import { useAppStore } from "@/store";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import PrimaryButton from "./PrimaryButton";
+import PlusIcon from '@/assets/icons/Plus.svg'
 
 type Props = {
   onCreate?: Function;
@@ -69,7 +71,9 @@ export default function TourDialog({ onCreate }: Props) {
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
-        <Button>+ New Tour</Button>
+      <PrimaryButton>
+          New Tour &nbsp; <img src={PlusIcon.src} width="18" />
+        </PrimaryButton>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
@@ -124,7 +128,7 @@ export default function TourDialog({ onCreate }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Create</Button>
+            <PrimaryButton type="submit">Create</PrimaryButton>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -100,7 +100,7 @@ export default function ProjectDialog({ onCreate }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Create</Button>
+            <PrimaryButton type="submit">Create</PrimaryButton>
           </DialogFooter>
         </form>
       </DialogContent>

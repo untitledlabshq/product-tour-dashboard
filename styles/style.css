@@ -1,5 +1,5 @@
 .pill {
-    @apply border border-accent-foreground bg-accent-foreground/10 px-3 py-1.5 text-xs rounded-full inline-block;
+    @apply border border-primary bg-primary-purple px-3 py-1.5 text-xs rounded-full inline-block;
 }
 
 .pill-success {
@@ -11,7 +11,15 @@
 }
 
 .gray-text {
-    @apply text-gray-400 dark:text-gray-300;
+    @apply text-gray-400;
+}
+
+.tab {
+    @apply px-5 py-1.5 bg-primary-purple border border-gray-800 rounded-xl cursor-pointer;
+}
+
+.tab-inactive {
+    @apply px-5 py-1.5 text-gray-400 cursor-pointer;
 }
 
 .steps {

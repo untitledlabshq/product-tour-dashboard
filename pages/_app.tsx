@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <article
       className={
-        "min-h-screen bg-neutral-50 dark:bg-[#00000E] dark:text-white " +
+        "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
         montserrat.className
       }
     >

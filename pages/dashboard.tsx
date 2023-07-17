@@ -50,9 +50,11 @@ export default function Dashboard() {
           {projects.map((project: any) => {
             return (
               <Link key={project.id} href={"/project/" + project.id}>
-                <div className="border border-gray-800 bg-white dark:bg-primary-purple p-5 rounded-lg h-full">
-                  <h1 className="text-lg font-bold">{project.name}</h1>
-                  <p className="text-sm mt-1 gray-text">{project.desc}</p>
+                <div className="flex flex-col justify-between border border-gray-800 bg-white dark:bg-primary-purple p-5 rounded-lg h-full">
+                  <div>
+                    <h1 className="text-lg font-bold">{project.name}</h1>
+                    <p className="text-sm mt-1 gray-text">{project.desc}</p>
+                  </div>
 
                   <div className="mt-3">
                     {project.tour_count ? (
@@ -61,7 +63,7 @@ export default function Dashboard() {
                         {project.tour_count > 1 && "s"}
                       </p>
                     ) : (
-                      <p className="pill">No Tours</p>
+                      <p className="pill border-gray-500">No Tours</p>
                     )}
                   </div>
                 </div>
