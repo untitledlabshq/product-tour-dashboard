@@ -113,19 +113,18 @@ function TourSettings({
   project,
   formState,
   setColor,
+  setMode,
   updateTheme,
 }: {
   project: any;
   formState: Record<string, ThemeOption>;
-  setColor: (id: string, color: ColorResult) => void;
   updateTheme: () => void;
+  setColor: (id: string, color: ColorResult) => void;
+  setMode: (value: string) => void;
 }) {
-  // Get the current value somehow
-  const [mode, setMode] = useState("light" as "light" | "dark");
-
   return (
     <div className="mt-5 md:grid grid-cols-3 gap-5">
-      <div className="p-4 col-span-1 border rounded-lg bg-primary-purple">
+      <div className="p-4 col-span-1 self-start border rounded-lg bg-primary-purple">
         <h2 className="font-semibold text-lg">Website's Script</h2>
         <p className="mt-0.5 text-sm gray-text">
           Include this script in your website to initialize the product tour
@@ -193,7 +192,7 @@ function TourSettings({
               <div
                 className={
                   "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer transition " +
-                  (mode === "dark"
+                  (formState["colorMode"].value === "dark"
                     ? "border bg-primary-purple"
                     : "text-gray-400 hover:text-gray-300")
                 }
@@ -205,7 +204,7 @@ function TourSettings({
               <div
                 className={
                   "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer " +
-                  (mode === "light"
+                  (formState["colorMode"].value === "light"
                     ? "border bg-primary-purple"
                     : "text-gray-400 hover:text-gray-300")
                 }
@@ -231,10 +230,20 @@ function TourSettings({
               backgroundRepeat: "repeat",
             }}
           >
-            <div className="bg-black p-5 rounded-xl relative">
+            <div
+              className={
+                (formState.colorMode.value === "light"
+                  ? "bg-white text-black"
+                  : "bg-black") + " p-5 rounded-xl relative "
+              }
+            >
               <div className="absolute -left-3 top-24">
                 <TriangleLeftIcon
-                  className="text-black"
+                  className={
+                    formState.colorMode.value === "light"
+                      ? "text-white"
+                      : "text-black"
+                  }
                   style={{ transform: "scale(3)" }}
                 />
               </div>
@@ -251,7 +260,12 @@ function TourSettings({
 
               <div className="mt-5 flex justify-end space-x-2">
                 <button
-                  className={"py-3 px-4 border rounded-xl text-white"}
+                  className={
+                    "py-3 px-4 border rounded-xl " +
+                    (formState.colorMode.value === "light"
+                      ? "text-black"
+                      : "text-white")
+                  }
                   style={{
                     borderColor: formState["primaryColor"].value,
                   }}
@@ -294,6 +308,18 @@ export default function ProjectId() {
     setFormState({
       ...formState,
       [id]: { id, type: "color", label: "", value: color.hex },
+    });
+  }
+
+  function setMode(value: string) {
+    setFormState({
+      ...formState,
+      colorMode: {
+        id: "colorMode",
+        type: "string",
+        label: "Color Mode",
+        value,
+      },
     });
   }
 
@@ -340,6 +366,14 @@ export default function ProjectId() {
       details.map((item) => {
         tempForm[item.id] = item;
       });
+      // Can be removed later when all is synced up
+      if (!tempForm["colorMode"])
+        tempForm["colorMode"] = {
+          id: "colorMode",
+          label: "Color Mode",
+          type: "string",
+          value: "dark",
+        };
 
       setFormState(tempForm);
     } catch (e) {
@@ -411,6 +445,7 @@ export default function ProjectId() {
               formState={formState}
               project={project}
               setColor={setColor}
+              setMode={setMode}
               updateTheme={updateTheme}
             />
           )}
