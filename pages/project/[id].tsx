@@ -190,7 +190,7 @@ function TourSettings({
             </Popover>
 
             <h2 className="mt-5 font-medium text-sm">Appearance</h2>
-            <div className="p-1 bg-primary-dark rounded-lg w-40">
+            <div className="mt-2 p-1 bg-primary-dark rounded-lg w-40">
               <div
                 className={
                   "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer transition " +
