@@ -18,7 +18,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ColorResult, SketchPicker } from "react-color";
-import { Pencil1Icon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import {
+  Pencil1Icon,
+  MoonIcon,
+  SunIcon,
+  Cross1Icon,
+  TriangleLeftIcon,
+} from "@radix-ui/react-icons";
+import ExampleImage from "@/assets/example-image.png";
+import PrimaryButton from "@/components/PrimaryButton";
 
 type Tab = "tour" | "settings";
 
@@ -59,7 +67,7 @@ function TourGrid({
         return (
           <div
             key={tour.id}
-            className="flex flex-col justify-between border border-gray-800 bg-primary-purple p-5 rounded-lg h-full cursor-pointer"
+            className="flex flex-col justify-between border border-gray-800 bg-primary-purple p-4 rounded-lg h-full cursor-pointer"
             onClick={() => router.push("/tour/" + tour.id)}
           >
             <div>
@@ -139,37 +147,7 @@ function TourSettings({
           Reflected in all the tours within this project
         </p>
 
-        <div className="mt-6 space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 gap-10">
-          {/* {themeOptions.map((item) => (
-            <div key={item.id} className="flex justify-between items-center">
-              <label className="font-medium text-sm mb-1">{item.label}</label>
-              <Popover>
-                <PopoverTrigger>
-                  <Button
-                    className="font-semibold"
-                    style={{
-                      background: formState[item.id]
-                        ? formState[item.id].value
-                        : "black",
-                      minWidth: "10rem",
-                      textShadow: "0px 0px 1.5px black",
-                    }}
-                  >
-                    {formState[item.id] ? formState[item.id].value : "No color"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <SketchPicker
-                    color={formState[item.id]?.value ?? ""}
-                    onChange={(color) => setColor(item.id, color)}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          ))} */}
-        </div>
-
-        <div className="w-full md:grid md:grid-cols-4 gap-5">
+        <div className="mt-6 w-full md:grid md:grid-cols-3 gap-5">
           {/* Left */}
           <div className="col-span-1 w-full">
             <h2 className="font-medium text-sm">Tooltip Color</h2>
@@ -215,9 +193,11 @@ function TourSettings({
               <div
                 className={
                   "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer transition " +
-                  (mode === "dark" ? "border bg-primary-purple" : "text-gray-400 hover:text-gray-300")
+                  (mode === "dark"
+                    ? "border bg-primary-purple"
+                    : "text-gray-400 hover:text-gray-300")
                 }
-                onClick={() => setMode('dark')}
+                onClick={() => setMode("dark")}
               >
                 <MoonIcon />
                 <span className="text-sm">Dark Mode</span>
@@ -225,24 +205,72 @@ function TourSettings({
               <div
                 className={
                   "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer " +
-                  (mode === "light" ? "border bg-primary-purple" : "text-gray-400 hover:text-gray-300")
+                  (mode === "light"
+                    ? "border bg-primary-purple"
+                    : "text-gray-400 hover:text-gray-300")
                 }
-                onClick={() => setMode('light')}
+                onClick={() => setMode("light")}
               >
                 <SunIcon />
                 <span className="text-sm">Light Mode</span>
               </div>
             </div>
+
+            <PrimaryButton className="mt-5 text-white" onClick={updateTheme}>
+              Save theme
+            </PrimaryButton>
           </div>
 
           {/* Right */}
-          <div className="col-span-3 border">rr</div>
+          <div
+            className="col-span-2 bg-primary-light border rounded-xl p-10"
+            style={{
+              backgroundImage: "radial-gradient(#555 1px, transparent 0)",
+              backgroundSize: "20px 20px",
+              backgroundPosition: "-19px -19px",
+              backgroundRepeat: "repeat",
+            }}
+          >
+            <div className="bg-black p-5 rounded-xl relative">
+              <div className="absolute -left-3 top-24">
+                <TriangleLeftIcon
+                  className="text-black"
+                  style={{ transform: "scale(3)" }}
+                />
+              </div>
+              <div className="flex justify-between items-center">
+                <h1 className="text-lg font-medium">Tooltip heading</h1>
+                <Cross1Icon />
+              </div>
+              <p className="text-sm gray-text">
+                This is a preview of a short and well-explained description for
+                this tooltip
+              </p>
+
+              <img src={ExampleImage.src} className="mt-5 w-full" />
+
+              <div className="mt-5 flex justify-end space-x-2">
+                <button
+                  className={"py-3 px-4 border rounded-xl text-white"}
+                  style={{
+                    borderColor: formState["primaryColor"].value,
+                  }}
+                >
+                  Previous
+                </button>
+                <button
+                  className={"py-3 px-4 rounded-xl text-white"}
+                  style={{
+                    backgroundColor: formState["primaryColor"].value,
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <Button className="mt-5" onClick={updateTheme}>
-        Save theme
-      </Button>
     </div>
   );
 }
