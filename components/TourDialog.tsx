@@ -16,7 +16,8 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PrimaryButton from "./PrimaryButton";
-import PlusIcon from '@/assets/icons/Plus.svg'
+import PlusIcon from "@/assets/icons/Plus.svg";
+import { toast } from "react-toastify";
 
 type Props = {
   onCreate?: Function;
@@ -55,23 +56,26 @@ export default function TourDialog({ onCreate }: Props) {
         }
       );
 
-      onCreate?.();
+      toast.success("Created a new tour!")
 
+      onCreate?.();
+    } catch (e) {
+      console.error(e);
+      toast.error("Error creating a new tour")
+    } finally {
       setOpen(false);
       setFormData({
         name: "",
         desc: "",
         url: "",
       });
-    } catch (e) {
-      console.error(e);
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
-      <PrimaryButton>
+        <PrimaryButton>
           New Tour &nbsp; <img src={PlusIcon.src} width="18" />
         </PrimaryButton>
       </DialogTrigger>

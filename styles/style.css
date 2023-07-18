@@ -19,7 +19,7 @@
 }
 
 .tab-inactive {
-    @apply px-5 py-1.5 text-gray-400 cursor-pointer;
+    @apply px-5 py-1.5 text-gray-400 hover:text-gray-300 transition cursor-pointer;
 }
 
 .steps {

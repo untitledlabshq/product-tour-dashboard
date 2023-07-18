@@ -5,6 +5,8 @@ import type { AppProps } from "next/app";
 import { Montserrat } from "next/font/google";
 import Head from "next/head";
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
@@ -38,6 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="icon" href="/logo.png" />
       </Head>
+
       <article
         className={
           "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
@@ -46,6 +49,16 @@ export default function App({ Component, pageProps }: AppProps) {
       >
         <Component {...pageProps} />
       </article>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
+        theme="dark"
+      />
     </>
   );
 }

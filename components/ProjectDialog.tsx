@@ -16,7 +16,8 @@ import axios from "axios";
 import { useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 
-import PlusIcon from '@/assets/icons/Plus.svg'
+import PlusIcon from "@/assets/icons/Plus.svg";
+import { toast } from "react-toastify";
 
 type Props = {
   onCreate?: Function;
@@ -38,20 +39,27 @@ export default function ProjectDialog({ onCreate }: Props) {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    try {
+      await axios.post(API_URL + "/project", formData, {
+        headers: {
+          Authorization: "Bearer " + store.session.access_token,
+        },
+      });
 
-    await axios.post(API_URL + "/project", formData, {
-      headers: {
-        Authorization: "Bearer " + store.session.access_token,
-      },
-    });
+      toast.success("Created a new project!")
 
-    onCreate?.();
-
-    setOpen(false);
-    setFormData({
-      name: "",
-      desc: "",
-    });
+      onCreate?.();
+    } catch (e) {
+      console.error(e)
+      toast.error("Error creating a new project")
+    }
+    finally{
+      setOpen(false);
+      setFormData({
+        name: "",
+        desc: "",
+      });
+    }
   }
 
   return (

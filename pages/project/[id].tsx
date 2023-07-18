@@ -28,6 +28,7 @@ import {
 } from "@radix-ui/react-icons";
 import ExampleImage from "@/assets/example-image.png";
 import PrimaryButton from "@/components/PrimaryButton";
+import { toast } from "react-toastify";
 
 type Tab = "tour" | "settings";
 
@@ -217,7 +218,10 @@ function TourSettings({
               </div>
             </div>
 
-            <PrimaryButton className="mt-5 border text-white" onClick={updateTheme}>
+            <PrimaryButton
+              className="mt-5 border text-white"
+              onClick={updateTheme}
+            >
               Save theme
             </PrimaryButton>
           </div>
@@ -385,8 +389,7 @@ export default function ProjectId() {
 
   async function updateTheme() {
     try {
-      console.log("Values", Object.values(formState));
-      const { data } = await axios.patch(
+      await axios.patch(
         API_URL + "/theme/" + project.theme_id,
         { details: Object.values(formState) }, // Keys don't matter, storing an array of ThemeOptions in the database
         {
@@ -395,9 +398,11 @@ export default function ProjectId() {
           },
         }
       );
-      console.log("Updated theme", data);
+
+      toast("Theme updated", { type: "success" });
     } catch (e) {
       console.error(e);
+      toast("Error updating theme", { type: "error" });
     }
   }
 
