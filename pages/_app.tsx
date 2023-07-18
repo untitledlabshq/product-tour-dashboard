@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { supabase } from "@/utils/client";
 import type { AppProps } from "next/app";
 import { Montserrat } from "next/font/google";
+import Head from "next/head";
 import { useEffect } from "react";
 
 const montserrat = Montserrat({
@@ -33,13 +34,18 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <article
-      className={
-        "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
-        montserrat.className
-      }
-    >
-      <Component {...pageProps} />
-    </article>
+    <>
+      <Head>
+        <link rel="icon" href="/logo.png" />
+      </Head>
+      <article
+        className={
+          "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
+          montserrat.className
+        }
+      >
+        <Component {...pageProps} />
+      </article>
+    </>
   );
 }
