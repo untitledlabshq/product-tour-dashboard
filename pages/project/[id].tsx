@@ -24,6 +24,7 @@ import {
   SunIcon,
   Cross1Icon,
   TriangleLeftIcon,
+  Link1Icon,
 } from "@radix-ui/react-icons";
 import ExampleImage from "@/assets/example-image.png";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -83,8 +84,9 @@ function TourGrid({
               </div>
               <p className="text-sm mt-1 gray-text">{tour.desc}</p>
 
-              <p className="text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded-full font-mono overflow-x-auto">
-                {tour.url}
+              <p className="flex items-center space-x-2 text-xs mt-2 mb-1 py-2 px-3 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded-full font-mono overflow-x-auto">
+                <Link1Icon />
+                <span>{tour.url}</span>
               </p>
             </div>
 
@@ -123,7 +125,7 @@ function TourSettings({
   setMode: (value: string) => void;
 }) {
   return (
-    <div className="mt-5 md:grid grid-cols-3 gap-5">
+    <div className="mt-5 md:grid grid-cols-3 gap-5 space-y-5 md:space-y-0">
       <div className="p-4 col-span-1 self-start border rounded-lg bg-primary-purple">
         <h2 className="font-semibold text-lg">Website's Script</h2>
         <p className="mt-0.5 text-sm gray-text">
@@ -222,7 +224,7 @@ function TourSettings({
 
           {/* Right */}
           <div
-            className="col-span-2 bg-primary-light border rounded-xl p-10"
+            className="mt-5 md:mt-0 col-span-2 bg-primary-light border rounded-xl p-10"
             style={{
               backgroundImage: "radial-gradient(#555 1px, transparent 0)",
               backgroundSize: "20px 20px",

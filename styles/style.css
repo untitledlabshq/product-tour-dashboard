@@ -36,21 +36,19 @@
 .step-card {
     padding: 20px;
     min-height: 7.4rem;
-    max-height: 8rem;
+    max-height: 12rem;
 
     min-width: 14rem;
     max-width: 16rem;
-    background-color: white;
-    color: black;
 
-    border: 2px solid #eee;
-    border-radius: 6px;
     transition: border 0.1s;
     user-select: none;
 
     flex: 0 1 500px;
     overflow-y: auto;
     overflow-x: hidden;
+
+    @apply bg-primary-dark text-white border border-gray-600 rounded-xl text-xs;
 }
 
 .step-card h1, .step-card h2, .step-card h3 {

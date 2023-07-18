@@ -10,6 +10,12 @@ import { API_URL } from "@/constants";
 import axios from "axios";
 import * as DOMPurify from "dompurify";
 import { updateTourActive } from "@/utils/api";
+import {
+  ArrowTopRightIcon,
+  Link1Icon,
+  Pencil1Icon,
+} from "@radix-ui/react-icons";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default function TourId() {
   const router = useRouter();
@@ -101,41 +107,50 @@ export default function TourId() {
           <div className="flex justify-between items-center">
             <div>
               <div
-                className="flex space-x-1 cursor-pointer"
+                className="flex items-center space-x-1 cursor-pointer"
                 onClick={() => window.history.back()}
               >
-                <ArrowLeft width={16} />
-                <span>Back</span>
+                <ArrowLeft width={24} />
+                <div className="flex items-center space-x-3">
+                  <h1 className="font-semibold text-2xl">{tour.name}</h1>
+                  <p className="flex items-center space-x-2 text-xs mt-2 mb-1 py-2 px-3 pr-4 bg-gray-300 dark:bg-primary-light text-gray-400 rounded-full font-mono overflow-x-auto">
+                    <Link1Icon />
+                    <span>{tour.url}</span>
+                  </p>
+                </div>
               </div>
-              <div className="mt-4">
-                {tour.active ? (
-                  <p className="pill pill-success">Enabled</p>
-                ) : (
-                  <p className="pill pill-warning">Disabled</p>
-                )}
-              </div>
-              <h1 className="mt-2 font-semibold text-2xl">{tour.name}</h1>
               <p className="mt-1 text-sm gray-text">{tour.desc}</p>
-              <p className="text-xs mt-2 mb-1 p-2 bg-gray-300 dark:bg-gray-600 rounded font-mono overflow-x-auto">
-                {tour.url}
-              </p>
             </div>
 
-            <div className="space-x-2">
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
+                <div>
+                  <label htmlFor="dev-tooltip" className="font-medium text-sm">
+                    Enabled
+                  </label>
+                </div>
+                <Switch
+                  id="dev-tooltip"
+                  checked={tour.active}
+                  onCheckedChange={(value) => updateActive(value)}
+                  disabled={loading.enabled}
+                />
+              </div>
               <Button
-                variant={"link"}
+                variant={"outline"}
+                className="border-primary text-xs py-4"
                 onClick={() => window.open(tour.url, "_blank")}
               >
-                Visit Page
+                Visit Page &nbsp; <ArrowTopRightIcon />
               </Button>
-              <Button variant={"default"} onClick={() => editSite()}>
-                Edit Steps
-              </Button>
+              <PrimaryButton variant={"default"} onClick={() => editSite()}>
+                Edit steps &nbsp; <Pencil1Icon />
+              </PrimaryButton>
             </div>
           </div>
 
-          <div className="mt-5 p-5 border rounded-lg">
-            <h1 className="font-semibold">Steps</h1>
+          <div className="mt-5">
+            <h1 className="font-semibold text-2xl">Steps</h1>
             {tour.steps ? (
               <div className="steps mt-3">
                 {tour.steps.map((step: any) => (
@@ -156,7 +171,7 @@ export default function TourId() {
             )}
           </div>
 
-          <div className="mt-5 p-5 border rounded-lg">
+          {/* <div className="mt-5 p-5 border rounded-lg">
             <h1 className="mb-5 font-semibold">Settings</h1>
 
             <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 gap-10">
@@ -174,18 +189,8 @@ export default function TourId() {
                   disabled={loading.enabled}
                 />
               </div>
-
-              {/* <div className="flex justify-between">
-                <div>
-                  <label htmlFor="dev-tooltip" className="font-semibold">
-                    Developer-friendly element names
-                  </label>
-                  <p className="text-sm gray-text">In Admin mode, show </p>
-                </div>
-                <Switch id="dev-tooltip" />
-              </div> */}
             </div>
-          </div>
+          </div> */}
         </main>
       ) : (
         <main className="p-10">Loading...</main>
