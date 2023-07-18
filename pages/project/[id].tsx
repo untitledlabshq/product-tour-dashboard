@@ -217,7 +217,7 @@ function TourSettings({
               </div>
             </div>
 
-            <PrimaryButton className="mt-5 text-white" onClick={updateTheme}>
+            <PrimaryButton className="mt-5 border text-white" onClick={updateTheme}>
               Save theme
             </PrimaryButton>
           </div>
