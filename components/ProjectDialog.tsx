@@ -46,14 +46,13 @@ export default function ProjectDialog({ onCreate }: Props) {
         },
       });
 
-      toast.success("Created a new project!")
+      toast.success("Created a new project!");
 
       onCreate?.();
     } catch (e) {
-      console.error(e)
-      toast.error("Error creating a new project")
-    }
-    finally{
+      console.error(e);
+      toast.error("Error creating a new project");
+    } finally {
       setOpen(false);
       setFormData({
         name: "",

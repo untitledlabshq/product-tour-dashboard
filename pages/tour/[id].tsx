@@ -164,7 +164,7 @@ export default function TourId() {
                 ))}
               </div>
             ) : (
-              <>No steps found yet. Add some!</>
+              <p className="mt-3">No steps found yet. Add some!</p>
             )}
           </div>
 
