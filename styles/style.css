@@ -58,3 +58,22 @@
 .step-card h1, .step-card h2, .step-card h3 {
     font-weight: bold;
 }
+
+table {
+    @apply bg-primary-foreground/50 rounded-xl;
+}
+
+table th {
+    @apply p-2 bg-primary-foreground;
+}
+
+table th:nth-child(1){
+    @apply rounded-tl-xl;
+}
+table th:last-child{
+    @apply rounded-tr-xl;
+}
+
+table td{
+    @apply p-3;
+}

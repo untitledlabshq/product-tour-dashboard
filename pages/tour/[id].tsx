@@ -22,6 +22,7 @@ export default function TourId() {
   const store = useAppStore();
 
   const [tour, setTour] = useState(null as any);
+  const [analytics, setAnalytics] = useState(null as any);
 
   // Loading State Mapping for form controls
   const [loading, setLoading] = useState({} as any);
@@ -70,6 +71,13 @@ export default function TourId() {
           API_URL + "/visitor/tour/" + router.query.id
         );
         console.log("Visitor data", data);
+
+        const { data: details } = await axios.get(
+          API_URL + "/visitor/tour/" + router.query.id + "/details"
+        );
+        console.log("Detailed Visitor data", details.data);
+
+        setAnalytics({ ...data, ipList: details.data });
       } catch (e) {
         console.error(e);
       }
@@ -107,7 +115,11 @@ export default function TourId() {
           <div className="flex justify-between items-center">
             <div>
               <div className="flex items-center space-x-1">
-                <ArrowLeft width={24} onClick={() => window.history.back()} className="cursor-pointer" />
+                <ArrowLeft
+                  width={24}
+                  onClick={() => window.history.back()}
+                  className="cursor-pointer"
+                />
                 <div className="flex items-center space-x-3">
                   <h1 className="font-semibold text-2xl">{tour.name}</h1>
                   <p className="flex items-center space-x-2 text-xs mt-2 mb-1 py-2 px-3 pr-4 bg-gray-300 dark:bg-primary-light text-gray-400 rounded-full font-mono overflow-x-auto">
@@ -167,6 +179,50 @@ export default function TourId() {
               <p className="mt-3">No steps found yet. Add some!</p>
             )}
           </div>
+
+          {analytics && (
+            <>
+              <h1 className="mt-5 font-semibold text-2xl">Analytics</h1>
+              <div className="mt-5 gap-3 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+                <div className="border border-gray-600 p-5 rounded-xl">
+                  <h3 className="gray-text">Visitors</h3>
+                  <h2 className="text-2xl md:text-3xl">
+                    {analytics.visitor_count}
+                  </h2>
+                </div>
+                <div className="border border-gray-600 p-5 rounded-xl">
+                  <h3 className="gray-text">Only Viewed</h3>
+                  <h2 className="text-2xl md:text-3xl">
+                    {analytics.views_count}
+                  </h2>
+                </div>
+                {/* <div className="border border-gray-600 p-5 rounded-xl">
+                <h3 className="gray-text">Completed</h3>
+                <h2 className="text-2xl md:text-3xl">{analytics.completed_tour_count}</h2>
+              </div> */}
+              </div>
+
+              <div className="mt-5">
+                {analytics.ipList.length === 0 && (
+                  <p className="gray-text">No visitor data yet</p>
+                )}
+                <table className="w-full">
+                  <tr>
+                    <th>IP Address</th>
+                    <th>Location</th>
+                    <th>Time</th>
+                  </tr>
+                  {analytics.ipList.map((item: any) => (
+                    <tr>
+                      <td>{item.IP}</td>
+                      <td>{item.location || "None"}</td>
+                      <td>{new Date(item.start_time).toDateString()}</td>
+                    </tr>
+                  ))}
+                </table>
+              </div>
+            </>
+          )}
 
           {/* <div className="mt-5 p-5 border rounded-lg">
             <h1 className="mb-5 font-semibold">Settings</h1>

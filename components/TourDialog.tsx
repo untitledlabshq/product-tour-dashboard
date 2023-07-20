@@ -111,7 +111,7 @@ export default function TourDialog({ onCreate }: Props) {
                 id="url"
                 name="url"
                 className="col-span-3"
-                placeholder="https://www.untitledlabs.io/mint"
+                placeholder="https://www.untitledlabs.io/mint/"
                 value={formData.url}
                 onChange={handleChange}
                 required
