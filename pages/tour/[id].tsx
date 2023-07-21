@@ -190,12 +190,12 @@ export default function TourId() {
                     {analytics.visitor_count}
                   </h2>
                 </div>
-                <div className="border border-gray-600 p-5 rounded-xl">
+                {/* <div className="border border-gray-600 p-5 rounded-xl">
                   <h3 className="gray-text">Only Viewed</h3>
                   <h2 className="text-2xl md:text-3xl">
                     {analytics.views_count}
                   </h2>
-                </div>
+                </div> */}
                 {/* <div className="border border-gray-600 p-5 rounded-xl">
                 <h3 className="gray-text">Completed</h3>
                 <h2 className="text-2xl md:text-3xl">{analytics.completed_tour_count}</h2>
