@@ -131,16 +131,12 @@ function TourSettings({
         <h2 className="font-semibold text-lg">Website's Script</h2>
         <p className="mt-0.5 text-sm gray-text">
           Include this script in your website to initialize the product tour
-        TODO: Also pull in the style in library itself or link tag here
         </p>
         <p className="w-auto inline-block text-xs mt-4 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded font-mono overflow-x-auto">
-          &lt;script type="module"
-          src="https://untitledlabs.io/productTour.js"&gt;&lt;/script&gt;
-          <br />
           &lt;script type="text/javascript"&gt;
-          <br />
-          ProductTour.init("{project.id}") <br />
-          &lt;/script&gt; <br />
+            window.ProductTourID = "{project.id}"
+          &lt;/script&gt;
+          &lt;script type="module" src="https://untitledlabs.io/tour.es.js" defer&gt;&lt;/script&gt;
         </p>
       </div>
 
