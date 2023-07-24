@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
-import { API_URL, themeOptions } from "@/constants";
+import { API_URL } from "@/constants";
 import { useAppStore } from "@/store";
 import { ThemeOption } from "@/types";
 import { updateTourActive } from "@/utils/api";
