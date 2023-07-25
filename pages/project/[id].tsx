@@ -133,7 +133,7 @@ function TourSettings({
           Include this script in your website to initialize the product tour
         </p>
         <p className="w-auto inline-block text-xs mt-4 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded font-mono overflow-x-auto">
-          &lt;link rel="stylesheet" href="https://untitledlabs.io/tour.css" /&gt;
+          &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/untitledlabshq/product-tour-dist/tour.css" /&gt;
 
           <br />
 
@@ -143,7 +143,7 @@ function TourSettings({
 
           <br />
 
-          &lt;script type="module" src="https://untitledlabs.io/tour.es.js" defer&gt;&lt;/script&gt;
+          &lt;script type="module" src="https://cdn.jsdelivr.net/gh/untitledlabshq/product-tour-dist/tour.es.js" defer&gt;&lt;/script&gt;
         </p>
       </div>
 
