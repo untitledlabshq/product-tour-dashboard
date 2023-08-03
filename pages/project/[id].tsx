@@ -127,7 +127,7 @@ function TourSettings({
 }) {
   return (
     <div className="mt-5 md:grid grid-cols-3 gap-5 space-y-5 md:space-y-0">
-      <div className="p-4 col-span-1 self-start border rounded-lg bg-primary-purple">
+      <div className="p-4 col-span-1 self-start border rounded-lg bg-primary-purple overflow-x-auto">
         <h2 className="font-semibold text-lg">Website's Script</h2>
         <p className="mt-0.5 text-sm gray-text">
           Include this script in your website to initialize the product tour
