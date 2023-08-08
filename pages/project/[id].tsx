@@ -335,7 +335,7 @@ function TourSettings({
                 </button>
                 <button
                   className={
-                    "py-2 px-6 rounded-xl flex items-center space-x-2 font-medium " +
+                    "py-2 px-7 rounded-xl flex items-center space-x-2 font-medium " +
                     (formState.colorMode?.value === "light"
                       ? "text-black"
                       : "text-white")
@@ -355,7 +355,7 @@ function TourSettings({
                 </button>
                 <button
                   className={
-                    "py-2 px-6 rounded-xl flex items-center space-x-2 font-medium bg-white text-black"
+                    "py-2 px-7 rounded-xl flex items-center space-x-2 font-medium bg-white text-black"
                   }
                   style={{
                     boxShadow:
