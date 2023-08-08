@@ -29,9 +29,17 @@ import {
 import ExampleImage from "@/assets/example-image.png";
 import PrimaryButton from "@/components/PrimaryButton";
 import { toast } from "react-toastify";
+import copy from "copy-to-clipboard";
+import { Space_Grotesk } from "next/font/google";
+
 import elk from "@/assets/elk.svg";
 import clipboard from "@/assets/icons/Clipboard.svg";
-import copy from "copy-to-clipboard";
+import arrow from "@/assets/icons/ArrowRight.svg";
+import arrowWhite from "@/assets/icons/ArrowRightWhite.svg";
+
+const grotesk = Space_Grotesk({
+  subsets: ["latin"],
+});
 
 type Tab = "tour" | "settings";
 
@@ -48,7 +56,7 @@ function WebsiteScript({ project }: { project: any }) {
               <script type="text/javascript"> window.ProductTourID = "6bd04ba4-924c-4e59-8e13-4e5c0598d07c" </script>
               <script type="module" src="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.es.js" defer></script>
               `);
-              toast.info("Copied!")
+            toast.info("Copied!");
           }}
         >
           <img src={clipboard.src} alt="Clipboard" width={18} />
@@ -267,7 +275,10 @@ function TourSettings({
 
           {/* Right */}
           <div
-            className="mt-5 md:mt-0 col-span-2 bg-primary-light border rounded-xl p-10"
+            className={
+              "mt-5 md:mt-0 col-span-2 bg-primary-light border rounded-xl p-10 " +
+              grotesk.className
+            }
             style={{
               backgroundImage: "radial-gradient(#555 1px, transparent 0)",
               backgroundSize: "20px 20px",
@@ -279,7 +290,7 @@ function TourSettings({
               className={
                 (formState.colorMode?.value === "light"
                   ? "bg-white text-black"
-                  : "bg-[#00000f]") + " p-5 rounded-xl relative "
+                  : "bg-[#00000f]") + " p-5 rounded-xl relative gradient-card "
               }
             >
               <div className="absolute -left-3 top-24">
@@ -292,38 +303,67 @@ function TourSettings({
                   style={{ transform: "scale(3)" }}
                 />
               </div>
-              <div className="flex justify-between items-center">
-                <h1 className="text-lg font-medium">Tooltip heading</h1>
-                <Cross1Icon />
+              <div className="mt-2 flex justify-between items-center">
+                <h1 className="font-medium text-gray-500">Step 1</h1>
+                <img
+                  src={`https://product-tour-dist.vercel.app/Watermark${
+                    formState.colorMode?.value[0].toUpperCase() +
+                    formState.colorMode?.value.slice(1)
+                  }.png`}
+                  alt=""
+                  className="max-w-[8rem]"
+                />
               </div>
-              <p className="text-sm gray-text">
+              <h1 className="mt-1 text-xl font-semibold">Tooltip heading</h1>
+              <p className="mt-1 text-sm text-gray-500">
                 This is a preview of a short and well-explained description for
                 this tooltip
               </p>
 
               <img src={ExampleImage.src} className="mt-5 w-full" />
 
-              <div className="mt-5 flex justify-end space-x-2">
+              <div className="mt-8 flex justify-end space-x-2">
                 <button
                   className={
-                    "py-3 px-4 border rounded-xl " +
+                    "py-2 px-2 mr-auto rounded-xl font-medium " +
                     (formState.colorMode?.value === "light"
                       ? "text-black"
                       : "text-white")
                   }
-                  style={{
-                    borderColor: formState["primaryColor"]?.value,
-                  }}
                 >
-                  Previous
+                  <span>Skip</span>
                 </button>
                 <button
-                  className={"py-3 px-4 rounded-xl text-white"}
+                  className={
+                    "py-2 px-6 rounded-xl flex items-center space-x-2 font-medium " +
+                    (formState.colorMode?.value === "light"
+                      ? "text-black"
+                      : "text-white")
+                  }
+                >
+                  {formState.colorMode?.value === "light" ? (
+                    <img src={arrow.src} alt="" className="w-4 rotate-180" />
+                  ) : (
+                    <img
+                      src={arrowWhite.src}
+                      alt=""
+                      className="w-4 rotate-180"
+                    />
+                  )}
+
+                  <span>Prev</span>
+                </button>
+                <button
+                  className={
+                    "py-2 px-6 rounded-xl flex items-center space-x-2 font-medium bg-white text-black"
+                  }
                   style={{
-                    backgroundColor: formState["primaryColor"]?.value,
+                    boxShadow:
+                      "0px 0px 20px 0px" + formState["primaryColor"]?.value,
                   }}
                 >
-                  Next
+                  <span>Next</span>
+                  <img src={arrow.src} alt="" className="w-4" />
                 </button>
               </div>
             </div>

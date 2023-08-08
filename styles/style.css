@@ -77,3 +77,21 @@ table th:last-child{
 table td{
     @apply p-3;
 }
+.gradient-card {
+    z-index: 99 !important;
+}
+/* .gradient-card::before {
+    content: '';
+    position: absolute;
+    width: 101.75%;
+    height: 101.75%;
+
+    left: -0.75%;
+    top: -0.75%;
+
+    background: linear-gradient(to bottom left, #FF2CF7, #FB047BCB, #FF7EBCCF, #FFFFFF00, #49FFE9A6, #130EFF);
+
+    z-index: 1 !important;
+
+    @apply rounded-xl;
+} */
