@@ -29,13 +29,38 @@ import {
 import ExampleImage from "@/assets/example-image.png";
 import PrimaryButton from "@/components/PrimaryButton";
 import { toast } from "react-toastify";
+import elk from "@/assets/elk.svg";
 
 type Tab = "tour" | "settings";
 
+function WebsiteScript({ project }: { project: any }) {
+  return (
+    <div className="p-4 col-span-1 self-start border rounded-lg bg-primary-purple overflow-x-auto">
+      <h2 className="font-semibold text-lg">Website's Script</h2>
+      <p className="mt-0.5 text-sm gray-text">
+        Include this script in your website to initialize the product tour
+      </p>
+      <p className="w-auto inline-block text-xs mt-4 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded font-mono overflow-x-auto">
+        &lt;link rel="stylesheet"
+        href="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.css" /&gt;
+        <br />
+        &lt;script type="text/javascript"&gt; window.ProductTourID = "
+        {project.id}" &lt;/script&gt;
+        <br />
+        &lt;script type="module"
+        src="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.es.js"
+        defer&gt;&lt;/script&gt;
+      </p>
+    </div>
+  );
+}
+
 function TourGrid({
+  project,
   tours,
   refresh,
 }: {
+  project: any;
   tours: any;
   refresh: () => Promise<void>;
 }) {
@@ -64,51 +89,62 @@ function TourGrid({
   }
 
   return (
-    <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 2xl:grid-cols-4 gap-3">
-      {tours.map((tour: any) => {
-        return (
-          <div
-            key={tour.id}
-            className="flex flex-col justify-between border border-gray-800 bg-primary-purple p-4 rounded-lg h-full cursor-pointer"
-            onClick={() => router.push("/tour/" + tour.id)}
-          >
-            <div>
-              <div className="flex justify-between items-center">
-                <h1 className="text-lg font-bold">{tour.name}</h1>
-                <Switch
-                  id={"enabled-" + tour.id}
-                  checked={tour.active}
-                  onCheckedChange={(value) => updateActive(tour.id, value)}
-                  disabled={loading["enabled-" + tour.id]}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-              <p className="text-sm mt-1 gray-text">{tour.desc}</p>
+    <>
+      <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 2xl:grid-cols-4 gap-3">
+        {tours.map((tour: any) => {
+          return (
+            <div
+              key={tour.id}
+              className="flex flex-col justify-between border border-gray-800 bg-primary-purple p-4 rounded-lg h-full cursor-pointer"
+              onClick={() => router.push("/tour/" + tour.id)}
+            >
+              <div>
+                <div className="flex justify-between items-center">
+                  <h1 className="text-lg font-bold">{tour.name}</h1>
+                  <Switch
+                    id={"enabled-" + tour.id}
+                    checked={tour.active}
+                    onCheckedChange={(value) => updateActive(tour.id, value)}
+                    disabled={loading["enabled-" + tour.id]}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+                <p className="text-sm mt-1 gray-text">{tour.desc}</p>
 
-              <p className="flex items-center space-x-2 text-xs mt-2 mb-1 py-2 px-3 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded-full font-mono overflow-x-auto">
-                <Link1Icon />
-                <span>{tour.url}</span>
-              </p>
-            </div>
-
-            <div className="mt-4 space-x-1.5">
-              {tour.steps ? (
-                <p className="pill">
-                  {tour.steps.length} Step
-                  {tour.steps.length > 1 && "s"}
+                <p className="flex items-center space-x-2 text-xs mt-2 mb-1 py-2 px-3 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded-full font-mono overflow-x-auto">
+                  <Link1Icon />
+                  <span>{tour.url}</span>
                 </p>
-              ) : (
-                <p className="pill border-gray-500">No Steps</p>
-              )}
-            </div>
-          </div>
-        );
-      })}
+              </div>
 
+              <div className="mt-4 space-x-1.5">
+                {tour.steps ? (
+                  <p className="pill">
+                    {tour.steps.length} Step
+                    {tour.steps.length > 1 && "s"}
+                  </p>
+                ) : (
+                  <p className="pill border-gray-500">No Steps</p>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
       {tours.length === 0 && (
-        <span className="gray-text">No tours created yet.</span>
+        <div className="mt-10 grid place-items-center">
+          <img src={elk.src} alt="Elk" />
+          <h1 className="font-medium text-2xl">No tours created yet!</h1>
+          <p className="mt-2 gray-text">
+            Install following script in your website to start with tours
+          </p>
+
+          <div className="mt-8 max-w-lg">
+            <WebsiteScript project={project} />
+          </div>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -127,25 +163,7 @@ function TourSettings({
 }) {
   return (
     <div className="mt-5 md:grid grid-cols-3 gap-5 space-y-5 md:space-y-0">
-      <div className="p-4 col-span-1 self-start border rounded-lg bg-primary-purple overflow-x-auto">
-        <h2 className="font-semibold text-lg">Website's Script</h2>
-        <p className="mt-0.5 text-sm gray-text">
-          Include this script in your website to initialize the product tour
-        </p>
-        <p className="w-auto inline-block text-xs mt-4 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded font-mono overflow-x-auto">
-          &lt;link rel="stylesheet" href="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.css" /&gt;
-
-          <br />
-
-          &lt;script type="text/javascript"&gt;
-            window.ProductTourID = "{project.id}"
-          &lt;/script&gt;
-
-          <br />
-
-          &lt;script type="module" src="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.es.js" defer&gt;&lt;/script&gt;
-        </p>
-      </div>
+      <WebsiteScript project={project} />
 
       <div className="p-4 col-span-2 border rounded-lg bg-primary-purple">
         <h2 className="font-semibold text-lg">Theme</h2>
@@ -164,13 +182,13 @@ function TourSettings({
                     className="w-6 h-6 border border-white/50 rounded"
                     style={{
                       background: formState["primaryColor"]
-                        ? formState["primaryColor"].value
+                        ? formState["primaryColor"]?.value
                         : "black",
                     }}
                   ></div>
                   <p className="text-sm">
                     {formState["primaryColor"]
-                      ? formState["primaryColor"].value
+                      ? formState["primaryColor"]?.value
                       : "No color"}
                   </p>
                   <span>
@@ -199,7 +217,7 @@ function TourSettings({
               <div
                 className={
                   "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer transition " +
-                  (formState["colorMode"].value === "dark"
+                  (formState["colorMode"]?.value === "dark"
                     ? "border bg-primary-purple"
                     : "text-gray-400 hover:text-gray-300")
                 }
@@ -211,7 +229,7 @@ function TourSettings({
               <div
                 className={
                   "p-2 flex items-center space-x-3 rounded-lg border-gray-800 cursor-pointer " +
-                  (formState["colorMode"].value === "light"
+                  (formState["colorMode"]?.value === "light"
                     ? "border bg-primary-purple"
                     : "text-gray-400 hover:text-gray-300")
                 }
@@ -242,7 +260,7 @@ function TourSettings({
           >
             <div
               className={
-                (formState.colorMode.value === "light"
+                (formState.colorMode?.value === "light"
                   ? "bg-white text-black"
                   : "bg-[#00000f]") + " p-5 rounded-xl relative "
               }
@@ -250,7 +268,7 @@ function TourSettings({
               <div className="absolute -left-3 top-24">
                 <TriangleLeftIcon
                   className={
-                    formState.colorMode.value === "light"
+                    formState.colorMode?.value === "light"
                       ? "text-white"
                       : "text-black"
                   }
@@ -272,12 +290,12 @@ function TourSettings({
                 <button
                   className={
                     "py-3 px-4 border rounded-xl " +
-                    (formState.colorMode.value === "light"
+                    (formState.colorMode?.value === "light"
                       ? "text-black"
                       : "text-white")
                   }
                   style={{
-                    borderColor: formState["primaryColor"].value,
+                    borderColor: formState["primaryColor"]?.value,
                   }}
                 >
                   Previous
@@ -285,7 +303,7 @@ function TourSettings({
                 <button
                   className={"py-3 px-4 rounded-xl text-white"}
                   style={{
-                    backgroundColor: formState["primaryColor"].value,
+                    backgroundColor: formState["primaryColor"]?.value,
                   }}
                 >
                   Next
@@ -450,7 +468,11 @@ export default function ProjectId() {
           </div>
 
           {tab === "tour" ? (
-            <TourGrid tours={tours} refresh={fetchProjectData} />
+            <TourGrid
+              project={project}
+              tours={tours}
+              refresh={fetchProjectData}
+            />
           ) : (
             <TourSettings
               formState={formState}

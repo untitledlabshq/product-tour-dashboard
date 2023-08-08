@@ -45,6 +45,7 @@ export default function Home() {
                 supabaseClient={supabase}
                 appearance={{ theme: ThemeSupa }}
                 providers={["google"]}
+                redirectTo={window.location.origin}
               />
             </div>
           </main>
