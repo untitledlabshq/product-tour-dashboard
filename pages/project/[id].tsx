@@ -30,13 +30,30 @@ import ExampleImage from "@/assets/example-image.png";
 import PrimaryButton from "@/components/PrimaryButton";
 import { toast } from "react-toastify";
 import elk from "@/assets/elk.svg";
+import clipboard from "@/assets/icons/Clipboard.svg";
+import copy from "copy-to-clipboard";
 
 type Tab = "tour" | "settings";
 
 function WebsiteScript({ project }: { project: any }) {
   return (
     <div className="p-4 col-span-1 self-start border rounded-lg bg-primary-purple overflow-x-auto">
-      <h2 className="font-semibold text-lg">Website's Script</h2>
+      <div className="flex justify-between">
+        <h2 className="font-semibold text-lg">Website's Script</h2>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            copy(`
+              <link rel="stylesheet" href="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.css" />
+              <script type="text/javascript"> window.ProductTourID = "6bd04ba4-924c-4e59-8e13-4e5c0598d07c" </script>
+              <script type="module" src="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.es.js" defer></script>
+              `);
+              toast.info("Copied!")
+          }}
+        >
+          <img src={clipboard.src} alt="Clipboard" width={18} />
+        </div>
+      </div>
       <p className="mt-0.5 text-sm gray-text">
         Include this script in your website to initialize the product tour
       </p>
