@@ -12,7 +12,7 @@ export default function Dashboard() {
   const store = useAppStore();
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchProjects();
@@ -35,7 +35,7 @@ export default function Dashboard() {
           setError(e.message);
           setLoading(false);
         });
-    }
+    } else setLoading(false);
   }
 
   return (
