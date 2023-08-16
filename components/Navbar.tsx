@@ -2,9 +2,7 @@ import { useAppStore } from "@/store";
 import { supabase } from "@/utils/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
 import Link from "next/link";
-import Logo from "@/assets/TooltipLogo.svg";
 import PrimaryButton from "./PrimaryButton";
 
 export default function Navbar() {
@@ -30,11 +28,13 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-primary dark:bg-gray-900 text-white flex justify-between items-center py-3 px-10">
+    <nav className="bg-primary dark:bg-gray-900 text-white flex justify-between items-center py-3 px-10 md:px-12">
       <div>
         <Link href="/">
           <img
-            src={Logo.src}
+            src="/logo_white.png"
+            alt="Logo"
+            width={120}
           />
         </Link>
       </div>
