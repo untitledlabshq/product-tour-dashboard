@@ -53,7 +53,7 @@ function WebsiteScript({ project }: { project: any }) {
           onClick={() => {
             copy(`
               <link rel="stylesheet" href="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.css" />
-              <script type="text/javascript"> window.ProductTourID = "6bd04ba4-924c-4e59-8e13-4e5c0598d07c" </script>
+              <script type="text/javascript"> window.ProductTourID = "${project.id}" </script>
               <script type="module" src="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.es.js" defer></script>
               `);
             toast.info("Copied!");
