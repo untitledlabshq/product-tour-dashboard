@@ -36,6 +36,7 @@ import elk from "@/assets/elk.svg";
 import clipboard from "@/assets/icons/Clipboard.svg";
 import arrow from "@/assets/icons/ArrowRight.svg";
 import arrowWhite from "@/assets/icons/ArrowRightWhite.svg";
+import DeleteDialog from "@/components/DeleteDialog";
 
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -186,9 +187,37 @@ function TourSettings({
   setColor: (id: string, color: ColorResult) => void;
   setMode: (value: string) => void;
 }) {
+  const store = useAppStore()
+  const router = useRouter()
+
+  async function deleteProject() {
+    try {
+      await axios.delete(API_URL + "/project/" + project.id, {
+        headers: {
+          Authorization: "Bearer " + store.session.access_token,
+        },
+      });
+
+      router.push("/dashboard")
+
+      toast.info("Deleted project");
+    } catch (e) {
+      console.error(e);
+      toast.error("Error deleting project");
+    }
+  }
+
   return (
     <div className="mt-5 md:grid grid-cols-3 gap-5 space-y-5 md:space-y-0">
-      <WebsiteScript project={project} />
+      <div>
+        <WebsiteScript project={project} />
+
+        <div className="mt-5 p-5 border border-red-400 rounded-lg bg-red-900/50">
+            <h2 className="text-red-300 font-semibold">Delete Project</h2>
+            <p className="text-sm text-red-100">Use this option cautiously</p>
+            <DeleteDialog callback={() => deleteProject()} />
+        </div>
+      </div>
 
       <div className="p-4 col-span-2 border rounded-lg bg-primary-purple">
         <h2 className="font-semibold text-lg">Theme</h2>
