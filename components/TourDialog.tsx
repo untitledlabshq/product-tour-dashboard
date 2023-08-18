@@ -41,6 +41,8 @@ export default function TourDialog({ onCreate }: Props) {
     e.preventDefault();
 
     try {
+      const toastId = toast.info("Creating...");
+
       await axios.post(
         API_URL + "/tour",
         {
@@ -55,12 +57,13 @@ export default function TourDialog({ onCreate }: Props) {
         }
       );
 
-      toast.success("Created a new tour!")
+      toast.dismiss(toastId);
+      toast.success("Created a new tour!");
 
       onCreate?.();
     } catch (e) {
       console.error(e);
-      toast.error("Error creating a new tour")
+      toast.error("Error creating a new tour");
     } finally {
       setOpen(false);
       setFormData({

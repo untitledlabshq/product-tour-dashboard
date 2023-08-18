@@ -39,12 +39,15 @@ export default function ProjectDialog({ onCreate }: Props) {
   async function handleSubmit(e: any) {
     e.preventDefault();
     try {
+      const toastId = toast.info("Creating...");
+
       await axios.post(API_URL + "/project", formData, {
         headers: {
           Authorization: "Bearer " + store.session.access_token,
         },
       });
 
+      toast.dismiss(toastId)
       toast.success("Created a new project!");
 
       onCreate?.();
