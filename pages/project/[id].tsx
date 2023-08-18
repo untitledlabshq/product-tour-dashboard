@@ -192,6 +192,8 @@ function TourSettings({
 
   async function deleteProject() {
     try {
+      const toastId = toast.info("Deleting...");
+
       await axios.delete(API_URL + "/project/" + project.id, {
         headers: {
           Authorization: "Bearer " + store.session.access_token,
@@ -200,6 +202,7 @@ function TourSettings({
 
       router.push("/dashboard")
 
+      toast.dismiss(toastId)
       toast.info("Deleted project");
     } catch (e) {
       console.error(e);

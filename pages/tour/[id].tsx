@@ -16,6 +16,8 @@ import {
   Pencil1Icon,
 } from "@radix-ui/react-icons";
 import PrimaryButton from "@/components/PrimaryButton";
+import DeleteDialog from "@/components/DeleteDialog";
+import { toast } from "react-toastify";
 
 export default function TourId() {
   const router = useRouter();
@@ -101,6 +103,26 @@ export default function TourId() {
         setLoading({ enabled: false });
         console.error(e);
       }
+    }
+  }
+
+  async function deleteTour() {
+    try {
+      const toastId = toast.info("Deleting...");
+
+      await axios.delete(API_URL + "/tour/" + tour.id, {
+        headers: {
+          Authorization: "Bearer " + store.session.access_token,
+        },
+      });
+
+      router.push("/project/" + tour.project_id);
+
+      toast.dismiss(toastId)
+      toast.info("Deleted Tour");
+    } catch (e) {
+      console.error(e);
+      toast.error("Error deleting Tour");
     }
   }
 
@@ -244,6 +266,12 @@ export default function TourId() {
               </div>
             </div>
           </div> */}
+
+          <div className="mt-5 max-w-sm p-5 border border-red-400 rounded-lg bg-red-900/50">
+            <h2 className="text-red-300 font-semibold">Delete Tour</h2>
+            <p className="text-sm text-red-100">Use this option cautiously</p>
+            <DeleteDialog callback={() => deleteTour()} />
+          </div>
         </main>
       ) : (
         <main className="p-10">Loading...</main>
