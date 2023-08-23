@@ -55,7 +55,7 @@ function WebsiteScript({ project }: { project: any }) {
             copy(`
               <link rel="stylesheet" href="https://product-tour-dist.vercel.app/tour.css" />
               <script type="text/javascript"> window.ProductTourID = "${project.id}" </script>
-              <script type="module" src="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.es.js" defer></script>
+              <script type="module" src="https://product-tour-dist.vercel.app/tour.es.js" defer></script>
               `);
             toast.info("Copied!");
           }}
@@ -74,7 +74,7 @@ function WebsiteScript({ project }: { project: any }) {
         {project.id}" &lt;/script&gt;
         <br />
         &lt;script type="module"
-        src="https://esm.sh/gh/untitledlabshq/product-tour-dist/tour.es.js"
+        src="https://product-tour-dist.vercel.app/tour.es.js"
         defer&gt;&lt;/script&gt;
       </p>
     </div>
