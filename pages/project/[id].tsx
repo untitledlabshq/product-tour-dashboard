@@ -53,7 +53,6 @@ function WebsiteScript({ project }: { project: any }) {
           className="cursor-pointer"
           onClick={() => {
             copy(`
-              <link rel="stylesheet" href="https://product-tour-dist.vercel.app/tour.css" />
               <script type="text/javascript"> window.ProductTourID = "${project.id}" </script>
               <script type="module" src="https://product-tour-dist.vercel.app/tour.es.js" defer></script>
               `);
@@ -67,11 +66,9 @@ function WebsiteScript({ project }: { project: any }) {
         Include this script in your website to initialize the product tour
       </p>
       <p className="w-auto inline-block text-xs mt-4 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded font-mono overflow-x-auto">
-        &lt;link rel="stylesheet"
-        href="https://product-tour-dist.vercel.app/tour.css" /&gt;
-        <br />
-        &lt;script type="text/javascript"&gt; window.ProductTourID = "
-        {project.id}" &lt;/script&gt;
+        &lt;script type="text/javascript"&gt; <br />
+         window.ProductTourID = "{project.id}" <br />
+         &lt;/script&gt;
         <br />
         &lt;script type="module"
         src="https://product-tour-dist.vercel.app/tour.es.js"
