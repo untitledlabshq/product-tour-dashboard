@@ -67,8 +67,8 @@ function WebsiteScript({ project }: { project: any }) {
       </p>
       <p className="w-auto inline-block text-xs mt-4 mb-1 p-2 bg-gray-300 dark:bg-primary-dark text-gray-400 rounded font-mono overflow-x-auto">
         &lt;script type="text/javascript"&gt; <br />
-         window.ProductTourID = "{project.id}" <br />
-         &lt;/script&gt;
+        window.ProductTourID = "{project.id}" <br />
+        &lt;/script&gt;
         <br />
         &lt;script type="module"
         src="https://product-tour-dist.vercel.app/tour.es.js"
@@ -176,6 +176,7 @@ function TourSettings({
   formState,
   setColor,
   setMode,
+  setOverlay,
   updateTheme,
 }: {
   project: any;
@@ -183,9 +184,10 @@ function TourSettings({
   updateTheme: () => void;
   setColor: (id: string, color: ColorResult) => void;
   setMode: (value: string) => void;
+  setOverlay: (value: boolean) => void;
 }) {
-  const store = useAppStore()
-  const router = useRouter()
+  const store = useAppStore();
+  const router = useRouter();
 
   async function deleteProject() {
     try {
@@ -197,9 +199,9 @@ function TourSettings({
         },
       });
 
-      router.push("/dashboard")
+      router.push("/dashboard");
 
-      toast.dismiss(toastId)
+      toast.dismiss(toastId);
       toast.info("Deleted project");
     } catch (e) {
       console.error(e);
@@ -213,9 +215,9 @@ function TourSettings({
         <WebsiteScript project={project} />
 
         <div className="mt-5 p-5 border border-red-400 rounded-lg bg-red-900/50">
-            <h2 className="text-red-300 font-semibold">Delete Project</h2>
-            <p className="text-sm text-red-100">Use this option cautiously</p>
-            <DeleteDialog callback={() => deleteProject()} />
+          <h2 className="text-red-300 font-semibold">Delete Project</h2>
+          <p className="text-sm text-red-100">Use this option cautiously</p>
+          <DeleteDialog callback={() => deleteProject()} />
         </div>
       </div>
 
@@ -293,6 +295,18 @@ function TourSettings({
                 <span className="text-sm">Light Mode</span>
               </div>
             </div>
+
+            <div className="mt-5 flex items-center justify-between">
+              <h2 className="font-medium text-sm">Background Overlay</h2>
+              <Switch
+                id={"modal-overlay"}
+                checked={formState["modalOverlay"]?.value ?? true}
+                onCheckedChange={(value) => setOverlay(value)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+
+            <br />
 
             <PrimaryButton
               className="mt-5 border text-white"
@@ -437,6 +451,18 @@ export default function ProjectId() {
     });
   }
 
+  function setOverlay(value: boolean) {
+    setFormState({
+      ...formState,
+      modalOverlay: {
+        id: "modalOverlay",
+        type: "boolean",
+        label: "Modal Overlay",
+        value,
+      },
+    });
+  }
+
   async function fetchProjectData() {
     if (router.query.id && store.session.access_token) {
       try {
@@ -566,6 +592,7 @@ export default function ProjectId() {
               setColor={setColor}
               setMode={setMode}
               updateTheme={updateTheme}
+              setOverlay={setOverlay}
             />
           )}
         </main>
