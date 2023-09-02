@@ -63,8 +63,13 @@ table {
     @apply bg-primary-foreground/50 rounded-xl;
 }
 
+/* Row of Table Headers */
+table tr:first-child {
+    @apply text-left;
+}
+
 table th {
-    @apply p-2 bg-primary-foreground;
+    @apply p-3 pl-5 bg-primary-foreground;
 }
 
 table th:nth-child(1){
@@ -74,8 +79,8 @@ table th:last-child{
     @apply rounded-tr-xl;
 }
 
-table td{
-    @apply p-3;
+table tr td{
+    @apply p-3 pl-5;
 }
 .gradient-card {
     transform-style: preserve-3d;

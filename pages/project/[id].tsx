@@ -549,7 +549,7 @@ export default function ProjectId() {
         <title>{project ? project.name : router.query.id} | Project</title>
       </Head>
       <Navbar />
-      {project && !loading ? (
+      {project && !loading && !error ? (
         <main className="p-10">
           <div className="flex items-center space-x-1">
             <ArrowLeft

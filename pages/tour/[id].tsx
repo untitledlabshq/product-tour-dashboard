@@ -238,7 +238,7 @@ export default function TourId() {
                     <tr>
                       <td>{item.IP}</td>
                       <td>{item.location || "None"}</td>
-                      <td>{new Date(item.start_time).toDateString()}</td>
+                      <td>{new Date(item.start_time).toDateString() + " " + new Date(item.start_time).toLocaleTimeString('en-IN')}</td>
                     </tr>
                   ))}
                 </table>
