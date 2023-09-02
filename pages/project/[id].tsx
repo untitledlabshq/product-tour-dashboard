@@ -422,6 +422,7 @@ export default function ProjectId() {
   const store = useAppStore();
   const [project, setProject] = useState(null as any);
   const [tours, setTours] = useState([] as any[]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const [formState, setFormState] = useState({} as Record<string, ThemeOption>);
@@ -466,6 +467,7 @@ export default function ProjectId() {
   async function fetchProjectData() {
     if (router.query.id && store.session.access_token) {
       try {
+        setLoading(true);
         // Fetch Project Metadata
         const { data } = await axios.get(
           API_URL + "/project/" + router.query.id,
@@ -489,10 +491,11 @@ export default function ProjectId() {
           }
         );
 
-        console.log({ tourData });
-
         setTours(tourData.sort((a: any, b: any) => (b.active ? 1 : -1)));
+
+        setLoading(false);
       } catch (e: any) {
+        setLoading(false);
         setError("An error occurred. " + e.message);
       }
     }
@@ -543,10 +546,10 @@ export default function ProjectId() {
   return (
     <>
       <Head>
-        <title>Project - {project ? project.name : router.query.id}</title>
+        <title>{project ? project.name : router.query.id} | Project</title>
       </Head>
       <Navbar />
-      {project ? (
+      {project && !loading ? (
         <main className="p-10">
           <div className="flex items-center space-x-1">
             <ArrowLeft
@@ -597,7 +600,9 @@ export default function ProjectId() {
           )}
         </main>
       ) : (
-        <main className="p-10">{error || "Loading..."}</main>
+        <main className="p-10">
+          {error} {loading && "Loading..."}
+        </main>
       )}
     </>
   );
