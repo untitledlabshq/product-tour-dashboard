@@ -5,6 +5,7 @@ import { useAppStore } from "@/store";
 import { useRouter } from "next/router";
 import { supabase } from "@/utils/client";
 import Head from "next/head";
+import { ConnectKitButton } from "connectkit";
 
 export default function Home() {
   const { session, setSession } = useAppStore();
@@ -36,13 +37,20 @@ export default function Home() {
   if (!session) {
     return (
       <>
-      <Head>
-        <title>Product Tours by Buildoor</title>
-      </Head>
+        <Head>
+          <title>Product Tours by Buildoor</title>
+        </Head>
         {mounted && (
           <main className="min-h-screen grid place-items-center dark:text-white">
             <div className="w-5/6 lg:w-[30%] mx-auto">
-              <img src="/logo_white.png" alt="Buildoor Logo" className="mb-10" />
+              <img
+                src="/logo_white.png"
+                alt="Buildoor Logo"
+                className="mb-10"
+              />
+              <div className="grid place-items-center">
+                <ConnectKitButton />
+              </div>
               <Auth
                 supabaseClient={supabase}
                 appearance={{ theme: ThemeSupa }}

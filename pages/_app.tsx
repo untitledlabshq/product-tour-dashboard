@@ -6,7 +6,15 @@ import { Montserrat } from "next/font/google";
 import Head from "next/head";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
+
+import { WagmiConfig, createConfig } from "wagmi";
+import { polygon } from "wagmi/chains";
+import {
+  ConnectKitProvider,
+  ConnectKitButton,
+  getDefaultConfig,
+} from "connectkit";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
@@ -35,20 +43,42 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, []);
 
+  const config = createConfig(
+    getDefaultConfig({
+      // Required API Keys
+      alchemyId: "CGVa13LLR40MLOYRpnwZmrRNsGnasvtJ", // or infuraId
+      walletConnectProjectId: "2df30772655cd76de2f649cf7ad4bc6f",
+
+      chains: [polygon],
+
+      // Required
+      appName: "Buildoor",
+
+      // Optional
+      appDescription: "Product Tour",
+      appUrl: "https://product-tour-dashboard.vercel.app/", // your app's url
+      appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg", // your app's icon, no bigger than 1024x1024px (max. 1MB)
+    })
+  );
+
   return (
     <>
       <Head>
         <link rel="icon" href="/icon.jpg" />
       </Head>
 
-      <article
-        className={
-          "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
-          montserrat.className
-        }
-      >
-        <Component {...pageProps} />
-      </article>
+      <WagmiConfig config={config}>
+        <ConnectKitProvider>
+          <article
+            className={
+              "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
+              montserrat.className
+            }
+          >
+            <Component {...pageProps} />
+          </article>
+        </ConnectKitProvider>
+      </WagmiConfig>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
