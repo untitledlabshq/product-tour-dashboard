@@ -14,6 +14,8 @@ export default function Navbar() {
   useEffect(() => {
     setMounted(true);
 
+    console.log({ session });
+
     if (!session) {
       router.push("/");
     }
@@ -31,16 +33,20 @@ export default function Navbar() {
     <nav className="bg-primary dark:bg-gray-900 text-white flex justify-between items-center py-3 px-10 md:px-12">
       <div>
         <Link href="/">
-          <img
-            src="/logo_white.png"
-            alt="Logo"
-            width={120}
-          />
+          <img src="/logo_white.png" alt="Logo" width={120} />
         </Link>
       </div>
-      <PrimaryButton className="px-4" variant="secondary" onClick={() => signOut()}>
-        Log Out
-      </PrimaryButton>
+      <div className="flex items-center space-x-3">
+        <Link href="/profile">Profile</Link>
+
+        <PrimaryButton
+          className="px-4"
+          variant="secondary"
+          onClick={() => signOut()}
+        >
+          Log Out
+        </PrimaryButton>
+      </div>
     </nav>
   );
 }

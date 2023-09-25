@@ -14,7 +14,13 @@ import {
   ConnectKitProvider,
   ConnectKitButton,
   getDefaultConfig,
+  SIWEProvider,
+  SIWEConfig,
 } from "connectkit";
+import axios from "axios";
+import { API_URL } from "@/constants";
+import { SiweMessage } from "siwe";
+import { siweConfig } from "@/constants/siwe";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
@@ -61,6 +67,8 @@ export default function App({ Component, pageProps }: AppProps) {
     })
   );
 
+  
+
   return (
     <>
       <Head>
@@ -68,16 +76,18 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <WagmiConfig config={config}>
-        <ConnectKitProvider>
-          <article
-            className={
-              "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
-              montserrat.className
-            }
-          >
-            <Component {...pageProps} />
-          </article>
-        </ConnectKitProvider>
+        <SIWEProvider {...siweConfig}>
+          <ConnectKitProvider>
+            <article
+              className={
+                "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
+                montserrat.className
+              }
+            >
+              <Component {...pageProps} />
+            </article>
+          </ConnectKitProvider>
+        </SIWEProvider>
       </WagmiConfig>
       <ToastContainer
         position="bottom-right"

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { supabase } from "@/utils/client";
 import Head from "next/head";
 import { ConnectKitButton } from "connectkit";
+import SIWEButton from "@/components/SIWEButton";
 
 export default function Home() {
   const { session, setSession } = useAppStore();
@@ -48,8 +49,8 @@ export default function Home() {
                 alt="Buildoor Logo"
                 className="mb-10"
               />
-              <div className="grid place-items-center">
-                <ConnectKitButton />
+              <div className="flex items-center justify-center space-x-3">
+                <SIWEButton />
               </div>
               <Auth
                 supabaseClient={supabase}
