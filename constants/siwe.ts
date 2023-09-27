@@ -1,10 +1,12 @@
 import { SIWEConfig } from "connectkit";
-import { API_URL } from ".";
+import { SIWE_API_URL } from ".";
 import axios from "axios";
 import { SiweMessage } from "siwe";
 
+// https://github.com/expressjs/session/issues/520
+
 export const siweConfig: SIWEConfig = {
-  getNonce: async () => (await axios.get(API_URL + "/siwe/nonce")).data,
+  getNonce: async () => (await axios.get(SIWE_API_URL + "/nonce")).data,
   createMessage: function ({ nonce, address, chainId }) {
     return new SiweMessage({
       version: "1",
@@ -19,10 +21,18 @@ export const siweConfig: SIWEConfig = {
   },
   verifyMessage: async (data) =>
     (
-      await axios.post(API_URL + "/siwe/verify", data, {
-        headers: { "Content-Type": "application/json" },
+      await fetch(SIWE_API_URL + "/verify", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       })
-    ).data,
-  getSession: async () => (await axios.get(API_URL + "/siwe/session")).data,
-  signOut: async () => (await axios.get(API_URL + "/siwe/logout")).data,
+    ).json(),
+  getSession: async () =>
+    (
+      await fetch(SIWE_API_URL + "/session", { credentials: "same-origin" })
+    ).json(),
+  signOut: async () => (await axios.get(SIWE_API_URL + "/logout")).data,
 };
