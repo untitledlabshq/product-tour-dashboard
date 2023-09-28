@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "connectkit": "^1.5.3",
+    "connectkit-next-siwe": "^0.2.0",
     "copy-to-clipboard": "^3.3.3",
     "dompurify": "^3.0.4",
     "ethers": "^6.7.1",

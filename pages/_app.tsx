@@ -16,11 +16,13 @@ import {
   getDefaultConfig,
   SIWEProvider,
   SIWEConfig,
+  SIWESession,
 } from "connectkit";
 import axios from "axios";
 import { API_URL } from "@/constants";
 import { SiweMessage } from "siwe";
-import { siweConfig } from "@/constants/siwe";
+import { siweClient } from "@/constants/siweClient";
+// import { siweConfig } from "@/constants/siwe";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
@@ -67,8 +69,6 @@ export default function App({ Component, pageProps }: AppProps) {
     })
   );
 
-  
-
   return (
     <>
       <Head>
@@ -76,7 +76,20 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <WagmiConfig config={config}>
-        <SIWEProvider {...siweConfig}>
+        {/* <SIWEProvider {...siweConfig}> */}
+        <siweClient.Provider
+          // Optional parameters
+          enabled={true} // defaults true
+          nonceRefetchInterval={300000} // in milliseconds, defaults to 5 minutes
+          sessionRefetchInterval={300000} // in milliseconds, defaults to 5 minutes
+          signOutOnDisconnect={true} // defaults true
+          signOutOnAccountChange={true} // defaults true
+          signOutOnNetworkChange={true} // defaults true
+          onSignIn={(session?: SIWESession) =>
+            console.log("onSignIn Session", session)
+          }
+          // onSignOut={() => void}
+        >
           <ConnectKitProvider>
             <article
               className={
@@ -87,7 +100,8 @@ export default function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </article>
           </ConnectKitProvider>
-        </SIWEProvider>
+        </siweClient.Provider>
+        {/* </SIWEProvider> */}
       </WagmiConfig>
       <ToastContainer
         position="bottom-right"
