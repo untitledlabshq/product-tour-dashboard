@@ -52,7 +52,7 @@ export default function TourDialog({ onCreate }: Props) {
         },
         {
           headers: {
-            Authorization: "Bearer " + store.session.access_token,
+            Authorization: "web2 " + store.session.access_token,
           },
         }
       );

@@ -4,22 +4,23 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PrimaryButton from "./PrimaryButton";
+import { useSIWE } from "connectkit";
+import SIWEButton from "./SIWEButton";
 
 export default function Navbar() {
   const { session, setSession } = useAppStore();
+  const { isSignedIn } = useSIWE();
   const router = useRouter();
 
-  const [mounted, setMounted] = useState(false);
+  // const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // setMounted(true);
 
-    console.log({ session });
-
-    if (!session) {
+    if (!session && !isSignedIn) {
       router.push("/");
     }
-  }, []);
+  }, [session, isSignedIn]);
 
   async function signOut() {
     const { error } = await supabase.auth.signOut();
@@ -39,13 +40,17 @@ export default function Navbar() {
       <div className="flex items-center space-x-3">
         <Link href="/profile">Profile</Link>
 
-        <PrimaryButton
-          className="px-4"
-          variant="secondary"
-          onClick={() => signOut()}
-        >
-          Log Out
-        </PrimaryButton>
+        {isSignedIn ? (
+          <SIWEButton />
+        ) : (
+          <PrimaryButton
+            className="px-4"
+            variant="secondary"
+            onClick={() => signOut()}
+          >
+            Log Out
+          </PrimaryButton>
+        )}
       </div>
     </nav>
   );

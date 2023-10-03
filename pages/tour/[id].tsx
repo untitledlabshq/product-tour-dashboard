@@ -112,7 +112,7 @@ export default function TourId() {
 
       await axios.delete(API_URL + "/tour/" + tour.id, {
         headers: {
-          Authorization: "Bearer " + store.session.access_token,
+          Authorization: "web2 " + store.session.access_token,
         },
       });
 

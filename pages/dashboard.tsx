@@ -7,6 +7,30 @@ import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import elk from "@/assets/elk.svg";
+import { useSIWE } from "connectkit";
+import { GetServerSideProps } from "next";
+import { siweServer } from "@/constants/siweServer";
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const { address } = await siweServer.getSession(req, res);
+
+  console.log("ServerSide", address);
+
+  if (address) {
+    // Web3
+    // const { data } = await axios.get(API_URL + "/project/user/", {
+    //   headers: {
+    //     Authorization: "web3 " + store.session.access_token,
+    //   },
+    // });
+  }
+
+  return {
+    props: {
+      // projectsSSR: data,
+    },
+  };
+};
 
 export default function Dashboard() {
   const store = useAppStore();
@@ -14,27 +38,47 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const { data, isSignedIn } = useSIWE();
+
   useEffect(() => {
-    fetchProjects();
+    if (store?.session?.user?.id) {
+      fetchProjects();
+    }
   }, [store.session]);
 
   async function fetchProjects() {
     if (store.session) {
-      setLoading(true);
-      await axios
-        .get(API_URL + "/project/user/" + store.session.user.id, {
-          headers: {
-            Authorization: "Bearer " + store.session.access_token,
-          },
-        })
-        .then((response) => {
-          setProjects(response.data);
-          setLoading(false);
-        })
-        .catch((e) => {
-          setError(e.message);
-          setLoading(false);
-        });
+      try {
+        setLoading(true);
+        // Fetch user's UUID from custom table
+        // const user = (
+        //   await axios.get(API_URL + "/user", {
+        //     headers: {
+        //       Authorization: "web2 " + store.session.access_token,
+        //     },
+        //   })
+        // ).data;
+        // const uuid = user.id;
+
+        await axios
+          .get(API_URL + "/project/user", {
+            headers: {
+              Authorization: "web2 " + store.session.access_token,
+            },
+          })
+          .then((response) => {
+            setProjects(response.data);
+            setLoading(false);
+          })
+          .catch((e) => {
+            setError(e.message);
+            setLoading(false);
+          });
+      } catch (e: any) {
+        setLoading(false);
+        setError(e.message);
+        console.error(e);
+      }
     } else setLoading(false);
   }
 

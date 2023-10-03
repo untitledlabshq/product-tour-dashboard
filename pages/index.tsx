@@ -5,11 +5,13 @@ import { useAppStore } from "@/store";
 import { useRouter } from "next/router";
 import { supabase } from "@/utils/client";
 import Head from "next/head";
-import { ConnectKitButton } from "connectkit";
+import { ConnectKitButton, useSIWE } from "connectkit";
 import SIWEButton from "@/components/SIWEButton";
 
 export default function Home() {
   const { session, setSession } = useAppStore();
+
+  const { isSignedIn } = useSIWE();
 
   const [mounted, setMounted] = useState(false);
 
@@ -35,7 +37,7 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (!session) {
+  if (!session && !isSignedIn) {
     return (
       <>
         <Head>

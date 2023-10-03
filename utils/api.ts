@@ -9,7 +9,7 @@ export async function updateTourActive(id: string, value: any, access_token: str
     },
     {
       headers: {
-        Authorization: "Bearer " + access_token,
+        Authorization: "web2 " + access_token,
       },
     }
   );

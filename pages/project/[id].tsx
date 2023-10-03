@@ -195,7 +195,7 @@ function TourSettings({
 
       await axios.delete(API_URL + "/project/" + project.id, {
         headers: {
-          Authorization: "Bearer " + store.session.access_token,
+          Authorization: "web2 " + store.session.access_token,
         },
       });
 
@@ -473,10 +473,12 @@ export default function ProjectId() {
           API_URL + "/project/" + router.query.id,
           {
             headers: {
-              Authorization: "Bearer " + store.session.access_token,
+              Authorization: "web2 " + store.session.access_token,
             },
           }
         );
+
+        console.log("Got project", data);
 
         setProject(data[0]);
         fetchTheme(data[0].theme_id);
@@ -486,7 +488,7 @@ export default function ProjectId() {
           API_URL + "/tour/project/" + router.query.id,
           {
             headers: {
-              Authorization: "Bearer " + store.session.access_token,
+              Authorization: "web2 " + store.session.access_token,
             },
           }
         );
@@ -504,8 +506,10 @@ export default function ProjectId() {
   async function fetchTheme(id: string) {
     try {
       const { data } = await axios.get(API_URL + "/theme/" + id);
-      const details = data[0].details as ThemeOption[];
+      const details = JSON.parse(data[0].details) as ThemeOption[];
       const tempForm = {} as Record<string, ThemeOption>;
+
+      console.log({ data, details });
       details.map((item) => {
         tempForm[item.id] = item;
       });
@@ -531,7 +535,7 @@ export default function ProjectId() {
         { details: Object.values(formState) }, // Keys don't matter, storing an array of ThemeOptions in the database
         {
           headers: {
-            Authorization: "Bearer " + store.session.access_token,
+            Authorization: "web2 " + store.session.access_token,
           },
         }
       );

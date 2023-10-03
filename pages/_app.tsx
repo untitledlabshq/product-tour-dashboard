@@ -44,7 +44,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
         if (hasExpired) {
           const newSession = await supabase.auth.refreshSession();
-          console.log({ newSession });
           store.setSession(newSession.data.session);
         }
       });

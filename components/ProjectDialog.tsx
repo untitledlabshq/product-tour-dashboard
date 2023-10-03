@@ -43,7 +43,7 @@ export default function ProjectDialog({ onCreate }: Props) {
 
       await axios.post(API_URL + "/project", formData, {
         headers: {
-          Authorization: "Bearer " + store.session.access_token,
+          Authorization: "web2 " + store.session.access_token,
         },
       });
 
