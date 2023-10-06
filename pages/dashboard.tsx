@@ -8,46 +8,77 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import elk from "@/assets/elk.svg";
 import { useSIWE } from "connectkit";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { siweServer } from "@/constants/siweServer";
+import { getEncryptedAddress } from "@/utils/crypto";
+import { createUser } from "@/utils/api";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
 
-  console.log("ServerSide", address);
+  let projects: any[] = [];
 
   if (address) {
-    // Web3
-    // const { data } = await axios.get(API_URL + "/project/user/", {
-    //   headers: {
-    //     Authorization: "web3 " + store.session.access_token,
-    //   },
-    // });
+    try {
+      // Web3
+      const { data, status } = await axios.get(API_URL + "/project/user/", {
+        headers: {
+          Authorization: "web3 " + getEncryptedAddress(address),
+        },
+        validateStatus: (status) => status === 200 || status === 404,
+      });
+
+      // TODO: See if 404 is for user not existing or no projects (in which case empty array should be there)
+      if (status === 404) {
+        console.log("Creating new User", address);
+        // Create New User
+        await createUser(address);
+        projects = []; //  New User
+      } else {
+        console.log("server-side data", { data });
+        projects = data;
+      }
+    } catch (e: any) {
+      console.error("Error while fetching User for ", address, e.message || e);
+      return {
+        notFound: true,
+      };
+    }
   }
+
+  console.log("ProjectsWeb3", projects);
 
   return {
     props: {
-      // projectsSSR: data,
+      projectsWeb3: projects,
     },
   };
 };
 
-export default function Dashboard() {
+export default function Dashboard({
+  projectsWeb3,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const store = useAppStore();
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const { data, isSignedIn } = useSIWE();
+  const { isSignedIn } = useSIWE();
 
   useEffect(() => {
-    if (store?.session?.user?.id) {
+    if (store?.session?.user?.id || isSignedIn) {
       fetchProjects();
     }
-  }, [store.session]);
+  }, [store.session, isSignedIn]);
 
   async function fetchProjects() {
-    if (store.session) {
+    if (isSignedIn && projectsWeb3) {
+      setProjects(projectsWeb3);
+      setLoading(false);
+      return;
+    }
+
+    if (store.session.access_token) {
       try {
         setLoading(true);
         // Fetch user's UUID from custom table
@@ -79,7 +110,9 @@ export default function Dashboard() {
         setError(e.message);
         console.error(e);
       }
-    } else setLoading(false);
+    }
+
+    setLoading(false);
   }
 
   return (

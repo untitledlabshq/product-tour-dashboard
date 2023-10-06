@@ -1,12 +1,20 @@
-import { ConnectKitButton, useSIWE, SIWEButton as SignInButton } from "connectkit";
+import {
+  ConnectKitButton,
+  useSIWE,
+  SIWEButton as SignInButton,
+  SIWESession,
+} from "connectkit";
 import { useAccount, useWalletClient } from "wagmi";
 import { useRouter } from "next/router";
 import PrimaryButton from "./PrimaryButton";
+import axios from "axios";
+import { API_URL } from "@/constants";
+import { fetchUserByAddress } from "@/utils/api";
 
 function SIWEButton() {
   const router = useRouter();
 
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { isSignedIn, signOut } = useSIWE({});
 
   function handleSignOut() {

@@ -478,8 +478,6 @@ export default function ProjectId() {
           }
         );
 
-        console.log("Got project", data);
-
         setProject(data[0]);
         fetchTheme(data[0].theme_id);
 
