@@ -6,7 +6,8 @@ import { getEncryptedAddress } from "./crypto";
 export async function updateTourActive(
   id: string,
   value: any,
-  access_token: string
+  access_token: string,
+  isWeb3?: boolean
 ) {
   await axios.patch(
     API_URL + "/tour/" + id,
@@ -15,7 +16,7 @@ export async function updateTourActive(
     },
     {
       headers: {
-        Authorization: "web2 " + access_token,
+        Authorization: (isWeb3 ? "web3 " : "web2 ") + access_token,
       },
     }
   );

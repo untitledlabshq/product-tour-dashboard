@@ -7,15 +7,18 @@ import { supabase } from "@/utils/client";
 import Head from "next/head";
 import { ConnectKitButton, useSIWE } from "connectkit";
 import SIWEButton from "@/components/SIWEButton";
+import { useAccount } from "wagmi";
 
 export default function Home() {
   const { session, setSession } = useAppStore();
 
-  const { isSignedIn } = useSIWE();
+  const { isSignedIn, data } = useSIWE();
 
   const [mounted, setMounted] = useState(false);
 
   const router = useRouter();
+
+  const { address } = useAccount();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -37,7 +40,10 @@ export default function Home() {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (!session && !isSignedIn) {
+  if (
+    (!session && !isSignedIn) ||
+    (isSignedIn && (!data || data?.address !== address))
+  ) {
     return (
       <>
         <Head>

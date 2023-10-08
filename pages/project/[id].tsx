@@ -37,6 +37,10 @@ import clipboard from "@/assets/icons/Clipboard.svg";
 import arrow from "@/assets/icons/ArrowRight.svg";
 import arrowWhite from "@/assets/icons/ArrowRightWhite.svg";
 import DeleteDialog from "@/components/DeleteDialog";
+import { siweServer } from "@/constants/siweServer";
+import { getEncryptedAddress } from "@/utils/crypto";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import useConnect from "@/hooks/useConnect";
 
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -82,23 +86,32 @@ function TourGrid({
   project,
   tours,
   refresh,
+  encryptedAddress,
 }: {
   project: any;
   tours: any;
+  encryptedAddress?: string;
   refresh: () => Promise<void>;
 }) {
   const [loading, setLoading] = useState({} as Record<string, boolean>);
   const router = useRouter();
   const store = useAppStore();
 
+  const { isWeb3 } = useConnect();
+
   async function updateActive(id: string, value: boolean) {
-    if (router.query.id && store.session) {
+    if (router.query.id && (store.session || isWeb3)) {
       const key = "enabled-" + id;
 
       try {
         setLoading({ [key]: true });
 
-        await updateTourActive(id as string, value, store.session.access_token);
+        await updateTourActive(
+          id as string,
+          value,
+          isWeb3 ? encryptedAddress : store.session.access_token,
+          isWeb3
+        );
 
         // Fetch tours again
         await refresh();
@@ -178,9 +191,11 @@ function TourSettings({
   setMode,
   setOverlay,
   updateTheme,
+  encryptedAddress,
 }: {
   project: any;
   formState: Record<string, ThemeOption>;
+  encryptedAddress?: string;
   updateTheme: () => void;
   setColor: (id: string, color: ColorResult) => void;
   setMode: (value: string) => void;
@@ -189,13 +204,17 @@ function TourSettings({
   const store = useAppStore();
   const router = useRouter();
 
+  const { isWeb3 } = useConnect();
+
   async function deleteProject() {
     try {
       const toastId = toast.info("Deleting...");
 
       await axios.delete(API_URL + "/project/" + project.id, {
         headers: {
-          Authorization: "web2 " + store.session.access_token,
+          Authorization: isWeb3
+            ? "web3 " + encryptedAddress
+            : "web2 " + store.session.access_token,
         },
       });
 
@@ -417,9 +436,29 @@ function TourSettings({
   );
 }
 
-export default function ProjectId() {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const { address } = await siweServer.getSession(req, res);
+
+  let encryptedAddress = null;
+  if (address) {
+    encryptedAddress = getEncryptedAddress(address);
+  }
+
+  return {
+    props: {
+      encryptedAddress,
+    },
+  };
+};
+
+export default function ProjectId({
+  encryptedAddress,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const store = useAppStore();
+
+  const { isWeb3 } = useConnect();
+
   const [project, setProject] = useState(null as any);
   const [tours, setTours] = useState([] as any[]);
   const [loading, setLoading] = useState(true);
@@ -465,7 +504,10 @@ export default function ProjectId() {
   }
 
   async function fetchProjectData() {
-    if (router.query.id && store.session.access_token) {
+    if (
+      router.query.id &&
+      ((store.session && store.session.access_token) || isWeb3)
+    ) {
       try {
         setLoading(true);
         // Fetch Project Metadata
@@ -473,7 +515,9 @@ export default function ProjectId() {
           API_URL + "/project/" + router.query.id,
           {
             headers: {
-              Authorization: "web2 " + store.session.access_token,
+              Authorization: isWeb3
+                ? "web3 " + encryptedAddress
+                : "web2 " + store.session.access_token,
             },
           }
         );
@@ -486,7 +530,9 @@ export default function ProjectId() {
           API_URL + "/tour/project/" + router.query.id,
           {
             headers: {
-              Authorization: "web2 " + store.session.access_token,
+              Authorization: isWeb3
+                ? "web3 " + encryptedAddress
+                : "web2 " + store.session.access_token,
             },
           }
         );
@@ -533,7 +579,9 @@ export default function ProjectId() {
         { details: Object.values(formState) }, // Keys don't matter, storing an array of ThemeOptions in the database
         {
           headers: {
-            Authorization: "web2 " + store.session.access_token,
+            Authorization: isWeb3
+              ? "web3 " + encryptedAddress
+              : "web2 " + store.session.access_token,
           },
         }
       );
@@ -581,7 +629,10 @@ export default function ProjectId() {
               </div>
             </div>
 
-            <TourDialog onCreate={fetchProjectData} />
+            <TourDialog
+              onCreate={fetchProjectData}
+              encryptedAddress={encryptedAddress}
+            />
           </div>
 
           {tab === "tour" ? (
@@ -589,6 +640,7 @@ export default function ProjectId() {
               project={project}
               tours={tours}
               refresh={fetchProjectData}
+              encryptedAddress={encryptedAddress}
             />
           ) : (
             <TourSettings
@@ -598,6 +650,7 @@ export default function ProjectId() {
               setMode={setMode}
               updateTheme={updateTheme}
               setOverlay={setOverlay}
+              encryptedAddress={encryptedAddress}
             />
           )}
         </main>

@@ -4,36 +4,44 @@ import { API_URL } from "@/constants";
 import { siweServer } from "@/constants/siweServer";
 import { useAppStore } from "@/store";
 import { fetchUserByAddress, fetchUserByToken } from "@/utils/api";
+import { getEncryptedAddress } from "@/utils/crypto";
 import axios from "axios";
 import { ConnectKitButton, useSIWE } from "connectkit";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
 
   let user = null;
+  let encryptedAddress = null;
   if (address) {
     user = await fetchUserByAddress(address);
+    encryptedAddress = getEncryptedAddress(address);
   }
 
   return {
     props: {
       userWeb3: user,
+      encryptedAddress,
     },
   };
 };
 
 function Profile({
   userWeb3,
+  encryptedAddress,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const session = useAppStore((state) => state.session);
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState({} as any);
 
   const { isSignedIn } = useSIWE();
+
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -44,6 +52,7 @@ function Profile({
   }, []);
 
   async function getUser() {
+    console.log({ userWeb3 });
     if (userWeb3 !== null) {
       setUser(userWeb3);
     }
@@ -57,14 +66,17 @@ function Profile({
   }
 
   function checkout() {
-    if (!session.access_token) return;
-
     const baseURL = API_URL + "/checkout";
     const params = new URLSearchParams();
     params.set("success_url", window.location.href);
-    params.set("typeOfAuthorization", "web2");
-    params.set("identity", session.access_token);
 
+    if (session && session?.access_token) {
+      params.set("typeOfAuthorization", "web2");
+      params.set("identity", session.access_token);
+    } else if (isSignedIn && isConnected) {
+      params.set("typeOfAuthorization", "web3");
+      params.set("identity", encryptedAddress);
+    }
     const url = baseURL + "?" + params.toString();
 
     // Redirect to Checkout
@@ -102,7 +114,7 @@ function Profile({
           )}
         </div>
 
-        {!!user.is_pro && (
+        {Object.hasOwn(user, "is_pro") && (
           <>
             <div className="mt-5">
               <h2 className="text-lg">Current Plan</h2>

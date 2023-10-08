@@ -12,30 +12,33 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { siweServer } from "@/constants/siweServer";
 import { getEncryptedAddress } from "@/utils/crypto";
 import { createUser } from "@/utils/api";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
 
   let projects: any[] = [];
+  let encryptedAddress = null;
 
   if (address) {
     try {
+      encryptedAddress = getEncryptedAddress(address);
+
       // Web3
-      const { data, status } = await axios.get(API_URL + "/project/user/", {
+      const { data, status } = await axios.get(API_URL + "/project/user", {
         headers: {
-          Authorization: "web3 " + getEncryptedAddress(address),
+          Authorization: "web3 " + encryptedAddress,
         },
         validateStatus: (status) => status === 200 || status === 404,
       });
 
       // TODO: See if 404 is for user not existing or no projects (in which case empty array should be there)
       if (status === 404) {
-        console.log("Creating new User", address);
         // Create New User
         await createUser(address);
         projects = []; //  New User
       } else {
-        console.log("server-side data", { data });
+        // console.log("server-side data", { data });
         projects = data;
       }
     } catch (e: any) {
@@ -46,22 +49,24 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   }
 
-  console.log("ProjectsWeb3", projects);
-
   return {
     props: {
       projectsWeb3: projects,
+      encryptedAddress,
     },
   };
 };
 
 export default function Dashboard({
   projectsWeb3,
+  encryptedAddress,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const store = useAppStore();
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
 
   const { isSignedIn } = useSIWE();
 
@@ -71,25 +76,20 @@ export default function Dashboard({
     }
   }, [store.session, isSignedIn]);
 
-  async function fetchProjects() {
+  async function fetchProjects(refetch = false) {
     if (isSignedIn && projectsWeb3) {
       setProjects(projectsWeb3);
       setLoading(false);
+      if (refetch) {
+        // Somehow router.replace(router.asPath) not working
+        router.reload();
+      }
       return;
     }
 
     if (store.session.access_token) {
       try {
         setLoading(true);
-        // Fetch user's UUID from custom table
-        // const user = (
-        //   await axios.get(API_URL + "/user", {
-        //     headers: {
-        //       Authorization: "web2 " + store.session.access_token,
-        //     },
-        //   })
-        // ).data;
-        // const uuid = user.id;
 
         await axios
           .get(API_URL + "/project/user", {
@@ -124,7 +124,10 @@ export default function Dashboard({
       <div className="pt-12 px-8 md:px-12">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl">Your Projects</h1>
-          <ProjectDialog onCreate={fetchProjects} />
+          <ProjectDialog
+            onCreate={() => fetchProjects(true)}
+            encryptedAddress={encryptedAddress}
+          />
         </div>
 
         <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 2xl:grid-cols-5 gap-3">
@@ -158,7 +161,10 @@ export default function Dashboard({
           <div className="mt-10 space-y-4 grid place-items-center">
             <img src={elk.src} alt="Elk" />
             <h1 className="font-medium text-2xl">Start with new project</h1>
-            <ProjectDialog onCreate={fetchProjects} />
+            <ProjectDialog
+              onCreate={() => fetchProjects(true)}
+              encryptedAddress={encryptedAddress}
+            />
           </div>
         )}
       </div>

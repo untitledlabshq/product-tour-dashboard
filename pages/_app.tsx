@@ -89,7 +89,7 @@ export default function App({ Component, pageProps }: AppProps) {
           }
           // onSignOut={() => void}
         >
-          <ConnectKitProvider>
+          <ConnectKitProvider theme="midnight">
             <article
               className={
                 "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +

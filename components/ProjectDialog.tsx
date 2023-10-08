@@ -17,13 +17,18 @@ import PrimaryButton from "./PrimaryButton";
 
 import PlusIcon from "@/assets/icons/Plus.svg";
 import { toast } from "react-toastify";
+import useConnect from "@/hooks/useConnect";
+import { useRouter } from "next/router";
 
 type Props = {
   onCreate?: Function;
+  encryptedAddress?: string;
 };
 
-export default function ProjectDialog({ onCreate }: Props) {
+export default function ProjectDialog({ onCreate, encryptedAddress }: Props) {
   const store = useAppStore();
+
+  const { isWeb3 } = useConnect();
 
   const [open, setOpen] = useState(false);
 
@@ -40,15 +45,26 @@ export default function ProjectDialog({ onCreate }: Props) {
     e.preventDefault();
     try {
       const toastId = toast.info("Creating...");
+      console.log("encryptedAddress", encryptedAddress);
+      if (isWeb3 && encryptedAddress) {
+        await axios.post(API_URL + "/project", formData, {
+          headers: {
+            Authorization: "web3 " + encryptedAddress,
+          },
+        });
+        toast.success("Created a new project!");
+      } else if (store.session && store.session.access_token) {
+        await axios.post(API_URL + "/project", formData, {
+          headers: {
+            Authorization: "web2 " + store.session.access_token,
+          },
+        });
+        toast.success("Created a new project!");
+      } else {
+        toast.error("An error occurred");
+      }
 
-      await axios.post(API_URL + "/project", formData, {
-        headers: {
-          Authorization: "web2 " + store.session.access_token,
-        },
-      });
-
-      toast.dismiss(toastId)
-      toast.success("Created a new project!");
+      toast.dismiss(toastId);
 
       onCreate?.();
     } catch (e) {

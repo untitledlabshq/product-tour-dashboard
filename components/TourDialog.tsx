@@ -17,15 +17,19 @@ import { useState } from "react";
 import PrimaryButton from "./PrimaryButton";
 import PlusIcon from "@/assets/icons/Plus.svg";
 import { toast } from "react-toastify";
+import useConnect from "@/hooks/useConnect";
 
 type Props = {
   onCreate?: Function;
+  encryptedAddress?: string;
 };
 
-export default function TourDialog({ onCreate }: Props) {
+export default function TourDialog({ onCreate, encryptedAddress }: Props) {
   const router = useRouter();
   const store = useAppStore();
   const [open, setOpen] = useState(false);
+
+  const { isWeb3 } = useConnect();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -52,7 +56,9 @@ export default function TourDialog({ onCreate }: Props) {
         },
         {
           headers: {
-            Authorization: "web2 " + store.session.access_token,
+            Authorization: isWeb3
+              ? "web3 " + encryptedAddress
+              : "web2 " + store.session.access_token,
           },
         }
       );

@@ -18,10 +18,33 @@ import {
 import PrimaryButton from "@/components/PrimaryButton";
 import DeleteDialog from "@/components/DeleteDialog";
 import { toast } from "react-toastify";
+import useConnect from "@/hooks/useConnect";
+import { siweServer } from "@/constants/siweServer";
+import { getEncryptedAddress } from "@/utils/crypto";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-export default function TourId() {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const { address } = await siweServer.getSession(req, res);
+
+  let encryptedAddress = null;
+  if (address) {
+    encryptedAddress = getEncryptedAddress(address);
+  }
+
+  return {
+    props: {
+      encryptedAddress,
+    },
+  };
+};
+
+export default function TourId({
+  encryptedAddress,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const store = useAppStore();
+
+  const { isWeb3 } = useConnect();
 
   const [tour, setTour] = useState(null as any);
   const [analytics, setAnalytics] = useState(null as any);
@@ -31,7 +54,7 @@ export default function TourId() {
 
   function editSite() {
     // Open Site for Editing
-    const access_token = store.session.access_token;
+    const access_token = isWeb3 ? encryptedAddress : store.session.access_token;
 
     if (!access_token) {
       router.push("/");
@@ -43,8 +66,9 @@ export default function TourId() {
       "?tourToken=" +
       access_token +
       "&tourId=" +
-      router.query.id;
-
+      router.query.id +
+      "&is_web3=" +
+      isWeb3;
     window.open(adminUrl, "_blank");
   }
 
@@ -87,14 +111,15 @@ export default function TourId() {
   }
 
   async function updateActive(value: boolean) {
-    if (router.query.id && store.session) {
+    if (router.query.id && (store.session || isWeb3)) {
       try {
         setLoading({ enabled: true });
 
         await updateTourActive(
           router.query.id as string,
           value,
-          store.session.access_token
+          isWeb3 ? encryptedAddress : store.session.access_token,
+          isWeb3
         );
 
         setTour({ ...tour, active: value });
@@ -110,15 +135,19 @@ export default function TourId() {
     try {
       const toastId = toast.info("Deleting...");
 
+      console.log("deleting tour. encryptedAddress", encryptedAddress);
+
       await axios.delete(API_URL + "/tour/" + tour.id, {
         headers: {
-          Authorization: "web2 " + store.session.access_token,
+          Authorization: isWeb3
+            ? "web3 " + encryptedAddress
+            : "web2 " + store.session.access_token,
         },
       });
 
       router.push("/project/" + tour.project_id);
 
-      toast.dismiss(toastId)
+      toast.dismiss(toastId);
       toast.info("Deleted Tour");
     } catch (e) {
       console.error(e);
@@ -238,7 +267,11 @@ export default function TourId() {
                     <tr>
                       <td>{item.IP}</td>
                       <td>{item.location || "None"}</td>
-                      <td>{new Date(item.start_time).toDateString() + " " + new Date(item.start_time).toLocaleTimeString('en-IN')}</td>
+                      <td>
+                        {new Date(item.start_time).toDateString() +
+                          " " +
+                          new Date(item.start_time).toLocaleTimeString("en-IN")}
+                      </td>
                     </tr>
                   ))}
                 </table>

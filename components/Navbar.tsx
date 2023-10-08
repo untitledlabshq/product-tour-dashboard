@@ -6,10 +6,12 @@ import Link from "next/link";
 import PrimaryButton from "./PrimaryButton";
 import { useSIWE } from "connectkit";
 import SIWEButton from "./SIWEButton";
+import { useAccount } from "wagmi";
 
 export default function Navbar() {
   const { session, setSession } = useAppStore();
-  const { isSignedIn } = useSIWE();
+  const { isSignedIn, data } = useSIWE();
+  const { address, isConnected } = useAccount();
   const router = useRouter();
 
   // const [mounted, setMounted] = useState(false);
@@ -17,7 +19,10 @@ export default function Navbar() {
   useEffect(() => {
     // setMounted(true);
 
-    if (!session && !isSignedIn) {
+    if (
+      (!session && !isSignedIn) ||
+      (isSignedIn && (!data || data?.address !== address))
+    ) {
       router.push("/");
     }
   }, [session, isSignedIn]);
