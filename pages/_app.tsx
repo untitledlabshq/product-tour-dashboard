@@ -84,9 +84,7 @@ export default function App({ Component, pageProps }: AppProps) {
           signOutOnDisconnect={true} // defaults true
           signOutOnAccountChange={true} // defaults true
           signOutOnNetworkChange={true} // defaults true
-          onSignIn={(session?: SIWESession) =>
-            console.log("onSignIn Session", session)
-          }
+          onSignIn={(session?: SIWESession) => {}}
           // onSignOut={() => void}
         >
           <ConnectKitProvider theme="midnight">

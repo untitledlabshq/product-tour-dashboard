@@ -29,7 +29,7 @@ export default function Navbar() {
 
   async function signOut() {
     const { error } = await supabase.auth.signOut();
-    if (error) console.log("Error while signing out", error);
+    if (error) console.warn("Error while signing out", error);
 
     setSession(null);
     router.push("/");

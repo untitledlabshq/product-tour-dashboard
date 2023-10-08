@@ -80,7 +80,6 @@ export default function TourId({
     if (router.query.id)
       try {
         const { data } = await axios.get(API_URL + "/tour/" + router.query.id);
-        console.log(data);
 
         setTour(data[0]);
 
@@ -96,12 +95,10 @@ export default function TourId({
         const { data } = await axios.get(
           API_URL + "/visitor/tour/" + router.query.id
         );
-        console.log("Visitor data", data);
 
         const { data: details } = await axios.get(
           API_URL + "/visitor/tour/" + router.query.id + "/details"
         );
-        console.log("Detailed Visitor data", details.data);
 
         setAnalytics({ ...data, ipList: details.data });
       } catch (e) {
@@ -134,8 +131,6 @@ export default function TourId({
   async function deleteTour() {
     try {
       const toastId = toast.info("Deleting...");
-
-      console.log("deleting tour. encryptedAddress", encryptedAddress);
 
       await axios.delete(API_URL + "/tour/" + tour.id, {
         headers: {

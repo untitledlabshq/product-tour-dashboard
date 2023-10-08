@@ -45,7 +45,7 @@ export default function ProjectDialog({ onCreate, encryptedAddress }: Props) {
     e.preventDefault();
     try {
       const toastId = toast.info("Creating...");
-      console.log("encryptedAddress", encryptedAddress);
+
       if (isWeb3 && encryptedAddress) {
         await axios.post(API_URL + "/project", formData, {
           headers: {

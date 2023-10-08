@@ -553,7 +553,6 @@ export default function ProjectId({
       const details = JSON.parse(data[0].details) as ThemeOption[];
       const tempForm = {} as Record<string, ThemeOption>;
 
-      console.log({ data, details });
       details.map((item) => {
         tempForm[item.id] = item;
       });

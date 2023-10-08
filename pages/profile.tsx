@@ -52,7 +52,6 @@ function Profile({
   }, []);
 
   async function getUser() {
-    console.log({ userWeb3 });
     if (userWeb3 !== null) {
       setUser(userWeb3);
     }
