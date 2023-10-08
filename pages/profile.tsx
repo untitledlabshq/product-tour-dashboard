@@ -1,3 +1,4 @@
+import CongratsDialog from "@/components/CongratsDialog";
 import Navbar from "@/components/Navbar";
 import PrimaryButton from "@/components/PrimaryButton";
 import { API_URL } from "@/constants";
@@ -10,8 +11,10 @@ import { ConnectKitButton, useSIWE } from "connectkit";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import { useSearchParams } from "next/navigation";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
@@ -36,6 +39,9 @@ function Profile({
   encryptedAddress,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const session = useAppStore((state) => state.session);
+  const { setCongrats } = useAppStore();
+  const queryParams = useSearchParams();
+
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState({} as any);
 
@@ -45,6 +51,11 @@ function Profile({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      if (queryParams.get("is_success") == "true") {
+        console.log({ setCongrats });
+        setCongrats(true);
+      }
+
       setMounted(true);
 
       getUser();
@@ -67,7 +78,7 @@ function Profile({
   function checkout() {
     const baseURL = API_URL + "/checkout";
     const params = new URLSearchParams();
-    params.set("success_url", window.location.href);
+    params.set("success_url", window.location.href + "?is_success=true");
 
     if (session && session?.access_token) {
       params.set("typeOfAuthorization", "web2");
