@@ -29,11 +29,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         headers: {
           Authorization: "web3 " + encryptedAddress,
         },
-        validateStatus: (status) => status === 200 || status === 404,
+        validateStatus: (status) =>
+          status === 200 || status === 404 || status === 401,
       });
 
       // TODO: See if 404 is for user not existing or no projects (in which case empty array should be there)
-      if (status === 404) {
+      if (status > 400 && status < 500) {
         // Create New User
         await createUser(address);
         projects = []; //  New User
