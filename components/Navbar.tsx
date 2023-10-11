@@ -11,22 +11,21 @@ import { useAccount } from "wagmi";
 export default function Navbar() {
   const { session, setSession } = useAppStore();
   const { isSignedIn, data } = useSIWE();
-  const { address, isConnected } = useAccount();
+  const { address, status } = useAccount();
   const router = useRouter();
 
   // const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     // setMounted(true);
-
     if (
-      typeof window === "undefined" ||
-      (!session && !isSignedIn) ||
-      (isSignedIn && (!data || data?.address !== address))
+      typeof window !== "undefined" &&
+      ((!session && !isSignedIn && status !== "reconnecting") ||
+        (isSignedIn && (!data || data?.address !== address)))
     ) {
       router.push("/");
     }
-  }, [session, isSignedIn]);
+  }, [session, isSignedIn, status]);
 
   async function signOut() {
     const { error } = await supabase.auth.signOut();

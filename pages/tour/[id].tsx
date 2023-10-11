@@ -74,7 +74,7 @@ export default function TourId({
 
   useEffect(() => {
     fetchTourData();
-  }, [router.query]);
+  }, [router.query, isWeb3]);
 
   async function fetchTourData() {
     if (router.query.id)

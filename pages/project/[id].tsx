@@ -470,7 +470,7 @@ export default function ProjectId({
 
   useEffect(() => {
     fetchProjectData();
-  }, [router.query]);
+  }, [router.query, isWeb3]);
 
   function setColor(id: string, color: ColorResult) {
     setFormState({
