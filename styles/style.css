@@ -51,11 +51,14 @@
     @apply bg-primary-dark text-white border border-gray-600 rounded-xl text-xs;
 }
 
-.step-card img, .step-card video {
+.step-card img,
+.step-card video {
     @apply rounded;
 }
 
-.step-card h1, .step-card h2, .step-card h3 {
+.step-card h1,
+.step-card h2,
+.step-card h3 {
     font-weight: bold;
 }
 
@@ -72,19 +75,22 @@ table th {
     @apply p-3 pl-5 bg-primary-foreground;
 }
 
-table th:nth-child(1){
+table th:nth-child(1) {
     @apply rounded-tl-xl;
 }
-table th:last-child{
+
+table th:last-child {
     @apply rounded-tr-xl;
 }
 
-table tr td{
+table tr td {
     @apply p-3 pl-5;
 }
+
 .gradient-card {
     transform-style: preserve-3d;
 }
+
 .gradient-card::before {
     content: '';
     position: absolute;
@@ -99,4 +105,19 @@ table tr td{
     transform: translateZ(-1px);
 
     @apply rounded-xl;
+}
+
+.navigation-loader {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0006;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
 }

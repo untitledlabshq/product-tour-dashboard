@@ -10,19 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { WagmiConfig, createConfig } from "wagmi";
 import { polygon } from "wagmi/chains";
-import {
-  ConnectKitProvider,
-  ConnectKitButton,
-  getDefaultConfig,
-  SIWEProvider,
-  SIWEConfig,
-  SIWESession,
-} from "connectkit";
-import axios from "axios";
-import { API_URL } from "@/constants";
-import { SiweMessage } from "siwe";
+import { ConnectKitProvider, getDefaultConfig, SIWESession } from "connectkit";
 import { siweClient } from "@/constants/siweClient";
 import CongratsDialog from "@/components/CongratsDialog";
+import NavigationLoader from "@/components/NavigationLoader";
 // import { siweConfig } from "@/constants/siwe";
 
 const montserrat = Montserrat({
@@ -32,7 +23,6 @@ const montserrat = Montserrat({
 
 export default function App({ Component, pageProps }: AppProps) {
   const store = useAppStore();
-  const congrats = useAppStore((state) => state.congrats);
 
   useEffect(() => {
     if (store.session) {
@@ -75,6 +65,8 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="icon" href="/icon.jpg" />
       </Head>
+
+      <NavigationLoader />
 
       <WagmiConfig config={config}>
         {/* <SIWEProvider {...siweConfig}> */}
