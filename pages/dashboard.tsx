@@ -13,6 +13,7 @@ import { siweServer } from "@/constants/siweServer";
 import { getEncryptedAddress } from "@/utils/crypto";
 import { createUser } from "@/utils/api";
 import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
@@ -71,11 +72,13 @@ export default function Dashboard({
 
   const { isSignedIn } = useSIWE();
 
+  const { status } = useAccount();
+
   useEffect(() => {
-    if (store?.session?.user?.id || isSignedIn) {
+    if (store?.session?.user?.id || (status !== "reconnecting" && isSignedIn)) {
       fetchProjects();
     }
-  }, [store.session, isSignedIn]);
+  }, [store.session, isSignedIn, status]);
 
   async function fetchProjects(refetch = false) {
     if (isSignedIn && projectsWeb3) {
