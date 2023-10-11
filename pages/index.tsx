@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { supabase } from "@/utils/client";
 import Head from "next/head";
 import { ConnectKitButton, useSIWE } from "connectkit";
-import SIWEButton from "@/components/SIWEButton";
 import { useAccount } from "wagmi";
 import bgImage from "@/assets/BG.png";
 import Link from "next/link";
@@ -107,7 +106,25 @@ export default function Home() {
                   appearance={{
                     theme: ThemeSupa,
                     variables: {
-                      default: {},
+                      default: {
+                        radii: {
+                          borderRadiusButton: "10px",
+                          inputBorderRadius: "10px",
+                        },
+                        colors: {
+                          brand: "#6347F4",
+                          brandAccent: "#583af0",
+                          inputText: "white",
+                          inputLabelText: "white",
+                          inputBorder: "#96A0AD"
+                        },
+                        fonts: {
+                          bodyFontFamily: "Montserrat, sans-serif",
+                          inputFontFamily: "Montserrat, sans-serif",
+                          labelFontFamily: "Montserrat, sans-serif",
+                          buttonFontFamily: "Montserrat, sans-serif",
+                        },
+                      },
                     },
                   }}
                   providers={[]}
