@@ -107,6 +107,27 @@ table tr td {
     @apply rounded-xl;
 }
 
+.gradient-border {
+    transform-style: preserve-3d;
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+
+    top: -1px;
+    left: -1px;
+
+    width: 100.5%;
+    height: 100.5%;
+
+    background: linear-gradient(to bottom, #939393, transparent);
+
+    transform: translateZ(-1px);
+
+    @apply rounded-xl;
+}
+
 .navigation-loader {
     position: fixed;
     top: 0;
