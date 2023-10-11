@@ -7,7 +7,7 @@ import { supabase } from "@/utils/client";
 import Head from "next/head";
 import { ConnectKitButton, useSIWE } from "connectkit";
 import { useAccount } from "wagmi";
-import bgImage from "@/assets/BG.png";
+import bgImage from "@/assets/bg.png";
 import Link from "next/link";
 import CustomConnectButton from "@/components/CustomConnectButton";
 import googleIcon from "@/assets/google.png";
