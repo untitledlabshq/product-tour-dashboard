@@ -75,14 +75,14 @@ export default function Home() {
               style={{
                 background: `url('${bgImage.src}')`,
                 backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundPosition: "bottom",
               }}
             >
               <div className="min-w-fit mx-auto border border-primary-gray p-5 px-12 rounded-xl bg-primary-purple">
                 <div className="mt-5 flex flex-col items-center">
                   <img src="/logo_white.png" alt="Buildoor Logo" width={200} />
                   <p className="mt-3 text-xs text-center max-w-xs break-words text-primary-gray">
-                    Get ready to give immersive experience for your dApp with us
+                    Get ready to give an immersive experience for your dApp with us
                   </p>
                 </div>
                 <div className="mt-5">
