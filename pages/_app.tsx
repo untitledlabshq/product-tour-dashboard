@@ -14,6 +14,7 @@ import { ConnectKitProvider, getDefaultConfig, SIWESession } from "connectkit";
 import { siweClient } from "@/constants/siweClient";
 import CongratsDialog from "@/components/CongratsDialog";
 import NavigationLoader from "@/components/NavigationLoader";
+import { ConnectKitCustomTheme } from "@/constants";
 // import { siweConfig } from "@/constants/siwe";
 
 const montserrat = Montserrat({
@@ -81,7 +82,7 @@ export default function App({ Component, pageProps }: AppProps) {
           onSignIn={(session?: SIWESession) => {}}
           // onSignOut={() => void}
         >
-          <ConnectKitProvider theme="midnight">
+          <ConnectKitProvider theme="midnight" customTheme={ConnectKitCustomTheme}>
             <article
               className={
                 "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +

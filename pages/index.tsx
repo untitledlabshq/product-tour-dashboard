@@ -82,7 +82,8 @@ export default function Home() {
                 <div className="mt-5 flex flex-col items-center">
                   <img src="/logo_white.png" alt="Buildoor Logo" width={200} />
                   <p className="mt-3 text-xs text-center max-w-xs break-words text-primary-gray">
-                    Get ready to give an immersive experience for your dApp with us
+                    Get ready to give an immersive experience for your dApp with
+                    us
                   </p>
                 </div>
                 <div className="mt-5">
@@ -116,7 +117,7 @@ export default function Home() {
                           brandAccent: "#583af0",
                           inputText: "white",
                           inputLabelText: "white",
-                          inputBorder: "#96A0AD"
+                          inputBorder: "#96A0AD",
                         },
                         fonts: {
                           bodyFontFamily: "Montserrat, sans-serif",
