@@ -20,6 +20,7 @@ export default function Navbar() {
     // setMounted(true);
 
     if (
+      typeof window === "undefined" ||
       (!session && !isSignedIn) ||
       (isSignedIn && (!data || data?.address !== address))
     ) {
@@ -38,7 +39,7 @@ export default function Navbar() {
   return (
     <nav className="bg-primary dark:bg-gray-900 text-white flex justify-between items-center py-3 px-10 md:px-12">
       <div>
-        <Link href="/">
+        <Link href={"/dashboard"}>
           <img src="/logo_white.png" alt="Logo" width={120} />
         </Link>
       </div>
