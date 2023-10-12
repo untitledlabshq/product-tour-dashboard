@@ -18,6 +18,7 @@ import { ConnectKitCustomTheme } from "@/constants";
 import { GetServerSideProps } from "next";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import Layout from "@/components/layout";
+import { useSearchParams } from "next/navigation";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
@@ -38,8 +39,15 @@ export default function App({
   initialSession: Session;
 }>) {
   const store = useAppStore();
+  const { setCongrats } = useAppStore();
+
+  const queryParams = useSearchParams();
 
   useEffect(() => {
+    if (queryParams.get("is_success") == "true") {
+      setCongrats(true);
+    }
+
     if (store.session) {
       // Check if session is expired, get new one
       supabase.auth.getSession().then(async (data) => {
