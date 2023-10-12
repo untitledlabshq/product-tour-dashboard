@@ -17,7 +17,6 @@ import NavigationLoader from "@/components/NavigationLoader";
 import { ConnectKitCustomTheme } from "@/constants";
 import { GetServerSideProps } from "next";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
-import Layout from "@/components/layout";
 import { useSearchParams } from "next/navigation";
 
 const montserrat = Montserrat({

@@ -41,7 +41,6 @@ import { siweServer } from "@/constants/siweServer";
 import { getEncryptedAddress } from "@/utils/crypto";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import useConnect from "@/hooks/useConnect";
-import Layout from "@/components/layout";
 
 const grotesk = Space_Grotesk({
   subsets: ["latin"],

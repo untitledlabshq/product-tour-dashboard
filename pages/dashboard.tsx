@@ -14,7 +14,6 @@ import { getEncryptedAddress } from "@/utils/crypto";
 import { createUser } from "@/utils/api";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
-import Layout from "@/components/layout";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
