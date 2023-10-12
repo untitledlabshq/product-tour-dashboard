@@ -46,6 +46,11 @@ export default function App({
   useEffect(() => {
     if (queryParams.get("is_success") == "true") {
       setCongrats(true);
+      history.replaceState(
+        null,
+        "",
+        window.location.origin + window.location.pathname
+      );
     }
 
     if (store.session) {
