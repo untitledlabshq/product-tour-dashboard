@@ -22,6 +22,7 @@ import useConnect from "@/hooks/useConnect";
 import { siweServer } from "@/constants/siweServer";
 import { getEncryptedAddress } from "@/utils/crypto";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Layout from "@/components/layout";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
@@ -151,6 +152,7 @@ export default function TourId({
   }
 
   return (
+    // <Layout>
     <>
       <Head>
         <title>Tour - {tour ? tour.name : router.query.id}</title>
@@ -305,5 +307,6 @@ export default function TourId({
         <main className="p-10">Loading...</main>
       )}
     </>
+    // </Layout>
   );
 }

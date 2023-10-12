@@ -50,7 +50,6 @@ function Profile({
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (queryParams.get("is_success") == "true") {
-        console.log({ setCongrats });
         setCongrats(true);
       }
 

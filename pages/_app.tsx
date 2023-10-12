@@ -15,14 +15,28 @@ import { siweClient } from "@/constants/siweClient";
 import CongratsDialog from "@/components/CongratsDialog";
 import NavigationLoader from "@/components/NavigationLoader";
 import { ConnectKitCustomTheme } from "@/constants";
-// import { siweConfig } from "@/constants/siwe";
+import { GetServerSideProps } from "next";
+import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
+import Layout from "@/components/layout";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export const getServerSideProps: GetServerSideProps = async () => {
+  console.log("Running on the server!");
+  return {
+    props: {},
+  };
+};
+
+export default function App({
+  Component,
+  pageProps,
+}: AppProps<{
+  initialSession: Session;
+}>) {
   const store = useAppStore();
 
   useEffect(() => {
@@ -61,6 +75,13 @@ export default function App({ Component, pageProps }: AppProps) {
     })
   );
 
+  // If page layout is available, use it. Else return the page
+  // const getLayout =
+  // // @ts-ignore
+  //   Component.getLayout === true
+  //     ? (page: any) => <Layout>{page}</Layout>
+  //     : (page: any) => page;
+
   return (
     <>
       <Head>
@@ -70,7 +91,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <NavigationLoader />
 
       <WagmiConfig config={config}>
-        {/* <SIWEProvider {...siweConfig}> */}
         <siweClient.Provider
           // Optional parameters
           enabled={true} // defaults true
@@ -79,21 +99,27 @@ export default function App({ Component, pageProps }: AppProps) {
           signOutOnDisconnect={true} // defaults true
           signOutOnAccountChange={true} // defaults true
           signOutOnNetworkChange={true} // defaults true
-          onSignIn={(session?: SIWESession) => {}}
-          // onSignOut={() => void}
         >
-          <ConnectKitProvider theme="midnight" customTheme={ConnectKitCustomTheme}>
-            <article
-              className={
-                "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
-                montserrat.className
-              }
+          <ConnectKitProvider
+            theme="midnight"
+            customTheme={ConnectKitCustomTheme}
+          >
+            <SessionContextProvider
+              supabaseClient={supabase}
+              initialSession={pageProps.initialSession}
             >
-              <Component {...pageProps} />
-            </article>
+              <article
+                className={
+                  "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
+                  montserrat.className
+                }
+              >
+                {/* {getLayout(<Component {...pageProps} />)} */}
+                <Component {...pageProps} />
+              </article>
+            </SessionContextProvider>
           </ConnectKitProvider>
         </siweClient.Provider>
-        {/* </SIWEProvider> */}
       </WagmiConfig>
       <ToastContainer
         position="bottom-right"
