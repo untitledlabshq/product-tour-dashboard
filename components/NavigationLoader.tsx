@@ -42,7 +42,7 @@ export default function NavigationLoader(props: { text?: string }) {
 
   return (
     <div className="navigation-loader">
-      <img src="/icon.jpg" width={200} className="animate-pulse" />
+      <img src="/icon.jpg" width={200} className="animate-pulse rounded-full" />
     </div>
   );
 }
