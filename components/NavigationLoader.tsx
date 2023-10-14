@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 
 const LOADER_THRESHOLD = 250;
 
-export default function NavigationLoader(props: { text?: string }) {
-  const { text = "Loading..." } = props;
+export default function NavigationLoader() {
   const [isLoading, setLoading] = React.useState(false);
   const router = useRouter();
 

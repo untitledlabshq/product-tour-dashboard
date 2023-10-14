@@ -41,6 +41,7 @@ import { siweServer } from "@/constants/siweServer";
 import { getEncryptedAddress } from "@/utils/crypto";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import useConnect from "@/hooks/useConnect";
+import useUserData from "@/hooks/useUserData";
 
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -206,6 +207,8 @@ function TourSettings({
 
   const { isWeb3 } = useConnect();
 
+  const { userData } = useUserData();
+
   async function deleteProject() {
     try {
       const toastId = toast.info("Deleting...");
@@ -367,14 +370,16 @@ function TourSettings({
               </div>
               <div className="mt-2 flex justify-between items-center">
                 <h1 className="font-medium text-gray-500">Step 1</h1>
-                <img
-                  src={`https://product-tour-dist.vercel.app/Watermark${
-                    formState.colorMode?.value[0].toUpperCase() +
-                    formState.colorMode?.value.slice(1)
-                  }.png`}
-                  alt=""
-                  className="max-w-[8rem]"
-                />
+                {userData && !userData.is_pro && (
+                  <img
+                    src={`https://product-tour-dist.vercel.app/Watermark${
+                      formState.colorMode?.value[0].toUpperCase() +
+                      formState.colorMode?.value.slice(1)
+                    }.png`}
+                    alt=""
+                    className="max-w-[8rem]"
+                  />
+                )}
               </div>
               <h1 className="mt-1 text-xl font-semibold">Tooltip heading</h1>
               <p className="mt-1 text-sm text-gray-500">
