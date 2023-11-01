@@ -22,6 +22,7 @@ import useConnect from "@/hooks/useConnect";
 import { siweServer } from "@/constants/siweServer";
 import { getEncryptedAddress } from "@/utils/crypto";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { downloadAsCSV } from "@/utils";
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
@@ -229,7 +230,24 @@ export default function TourId({
 
           {analytics && (
             <>
-              <h1 className="mt-5 font-semibold text-2xl">Analytics</h1>
+              <div className="flex justify-between items-center">
+                <h1 className="mt-5 font-semibold text-2xl">Analytics</h1>
+                {analytics.ipList && (
+                  <PrimaryButton
+                    onClick={() =>
+                      downloadAsCSV(
+                        analytics.ipList.map((item: any) => ({
+                          ...item.location,
+                          ...item,
+                        }))
+                      )
+                    }
+                  >
+                    Download as CSV
+                  </PrimaryButton>
+                )}
+              </div>
+
               <div className="mt-5 gap-3 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
                 <div className="border border-gray-600 p-5 rounded-xl">
                   <h3 className="gray-text">Visitors</h3>
@@ -237,16 +255,6 @@ export default function TourId({
                     {analytics.visitor_count}
                   </h2>
                 </div>
-                {/* <div className="border border-gray-600 p-5 rounded-xl">
-                  <h3 className="gray-text">Only Viewed</h3>
-                  <h2 className="text-2xl md:text-3xl">
-                    {analytics.views_count}
-                  </h2>
-                </div> */}
-                {/* <div className="border border-gray-600 p-5 rounded-xl">
-                <h3 className="gray-text">Completed</h3>
-                <h2 className="text-2xl md:text-3xl">{analytics.completed_tour_count}</h2>
-              </div> */}
               </div>
 
               <div className="mt-5">
@@ -262,7 +270,30 @@ export default function TourId({
                   {analytics.ipList.map((item: any) => (
                     <tr>
                       <td>{item.IP}</td>
-                      <td>{item.location || "None"}</td>
+                      <td>
+                        {item.location ? (
+                          <>
+                            <p>
+                              <b>Country</b> {item.location.country}
+                            </p>
+                            <p>
+                              <b>City</b> {item.location.city}
+                            </p>
+                            <p>
+                              <b>Region</b> {item.location.region}
+                            </p>
+                            <p>
+                              <b>Timezone</b> {item.location.timezone}
+                            </p>
+                            <p>
+                              <b>Latitude/Longitude</b> {item.location.ll[0]},{" "}
+                              {item.location.ll[1]}
+                            </p>
+                          </>
+                        ) : (
+                          "None"
+                        )}
+                      </td>
                       <td>
                         {new Date(item.start_time).toDateString() +
                           " " +
