@@ -144,29 +144,30 @@ function Dashboard({
         <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 2xl:grid-cols-5 gap-3">
           {loading && <span>Loading...</span>}
           {projects.length === 0 && error && <span>{error}</span>}
-          {projects.map((project: any) => {
-            return (
-              <Link key={project.id} href={"/project/" + project.id}>
-                <div className="flex flex-col justify-between border border-gray-800 bg-white dark:bg-primary-purple p-5 rounded-lg h-full">
-                  <div>
-                    <h1 className="text-lg font-bold">{project.name}</h1>
-                    <p className="text-sm mt-1 gray-text">{project.desc}</p>
-                  </div>
+          {projects &&
+            projects.map((project: any) => {
+              return (
+                <Link key={project.id} href={"/project/" + project.id}>
+                  <div className="flex flex-col justify-between border border-gray-800 bg-white dark:bg-primary-purple p-5 rounded-lg h-full">
+                    <div>
+                      <h1 className="text-lg font-bold">{project.name}</h1>
+                      <p className="text-sm mt-1 gray-text">{project.desc}</p>
+                    </div>
 
-                  <div className="mt-3">
-                    {project.tour_count ? (
-                      <p className="pill">
-                        {project.tour_count} Tour
-                        {project.tour_count > 1 && "s"}
-                      </p>
-                    ) : (
-                      <p className="pill border-gray-500">No Tours</p>
-                    )}
+                    <div className="mt-3">
+                      {project.tour_count ? (
+                        <p className="pill">
+                          {project.tour_count} Tour
+                          {project.tour_count > 1 && "s"}
+                        </p>
+                      ) : (
+                        <p className="pill border-gray-500">No Tours</p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
         </div>
         {!loading && projects.length === 0 && (
           <div className="mt-10 space-y-4 grid place-items-center">

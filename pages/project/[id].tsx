@@ -14,15 +14,13 @@ import { updateTourActive } from "@/utils/api";
 import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ColorResult, SketchPicker } from "react-color";
 import {
   Pencil1Icon,
   MoonIcon,
   SunIcon,
-  Cross1Icon,
   TriangleLeftIcon,
   Link1Icon,
 } from "@radix-ui/react-icons";
@@ -47,7 +45,7 @@ const grotesk = Space_Grotesk({
   subsets: ["latin"],
 });
 
-type Tab = "tour" | "settings";
+type Tab = "tour" | "analytics" | "settings";
 
 function WebsiteScript({ project }: { project: any }) {
   return (
@@ -441,6 +439,112 @@ function TourSettings({
   );
 }
 
+function TourAnalytics({ project }: { project: any }) {
+  const [data, setData] = useState({} as any);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (project.id && project.id.length > 0) {
+      fetchProjectAnalytics();
+    }
+  }, [project]);
+
+  const fetchProjectAnalytics = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data: data0 } = await axios.get(
+        API_URL + "/visitor/project/" + project.id
+      );
+      const { data: data1 } = await axios.get(
+        API_URL + "/visitor/project/" + project.id + "/details"
+      );
+
+      console.log({ data0, data1 });
+
+      setData({ ...data0, ...data1.data });
+
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      console.error(e);
+    }
+  }, [project.id]);
+
+  return (
+    <div className="p-5">
+      <h1 className="font-semibold text-xl">Analytics</h1>
+      {loading ? (
+        <p className="mt-5">Loading...</p>
+      ) : (
+        <>
+          <div className="mt-5 flex flex-wrap gap-5">
+            <div className="p-4 w-48 rounded-xl border border-gray-700">
+              <h3>Views</h3>
+              <p className="text-2xl">{data.views_count}</p>
+            </div>
+            <div className="p-4 w-48 rounded-xl border border-gray-700">
+              <h3>Visitors</h3>
+              <p className="text-2xl">{data.visitor_count}</p>
+            </div>
+            <div className="p-4 w-48 rounded-xl border border-gray-700">
+              <h3>Completed Tours</h3>
+              <p className="text-2xl">{data.completed_tour_count}</p>
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <table className="w-full">
+              <tr>
+                <th>IP Address</th>
+                <th>Location</th>
+                <th>Time</th>
+              </tr>
+              {data.details && data.details.length === 0 && (
+                <p className="p-5 gray-text">No visitor data yet</p>
+              )}
+              {data.details &&
+                data.details.map((item: any) => (
+                  <tr>
+                    <td>{item.IP}</td>
+                    <td>
+                      {item.location ? (
+                        <>
+                          <p>
+                            <b>Country</b> {item.location.country}
+                          </p>
+                          <p>
+                            <b>City</b> {item.location.city}
+                          </p>
+                          <p>
+                            <b>Region</b> {item.location.region}
+                          </p>
+                          <p>
+                            <b>Timezone</b> {item.location.timezone}
+                          </p>
+                          <p>
+                            <b>Latitude/Longitude</b> {item.location.ll[0]},{" "}
+                            {item.location.ll[1]}
+                          </p>
+                        </>
+                      ) : (
+                        "None"
+                      )}
+                    </td>
+                    <td>
+                      {new Date(item.start_time).toDateString() +
+                        " " +
+                        new Date(item.start_time).toLocaleTimeString("en-IN")}
+                    </td>
+                  </tr>
+                ))}
+            </table>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { address } = await siweServer.getSession(req, res);
 
@@ -597,6 +701,36 @@ export default function ProjectId({
     }
   }
 
+  function renderTab(tab: string) {
+    switch (tab) {
+      case "tour":
+        return (
+          <TourGrid
+            project={project}
+            tours={tours}
+            refresh={fetchProjectData}
+            encryptedAddress={encryptedAddress}
+          />
+        );
+      case "analytics":
+        return <TourAnalytics project={project} />;
+      case "settings":
+        return (
+          <TourSettings
+            formState={formState}
+            project={project}
+            setColor={setColor}
+            setMode={setMode}
+            updateTheme={updateTheme}
+            setOverlay={setOverlay}
+            encryptedAddress={encryptedAddress}
+          />
+        );
+      default:
+        return <></>;
+    }
+  }
+
   return (
     <>
       <Head>
@@ -626,6 +760,12 @@ export default function ProjectId({
                 <h2>Tour</h2>
               </div>
               <div
+                className={tab === "analytics" ? "tab" : "tab-inactive"}
+                onClick={() => setTab("analytics")}
+              >
+                <h2>Analytics</h2>
+              </div>
+              <div
                 className={tab === "settings" ? "tab" : "tab-inactive"}
                 onClick={() => setTab("settings")}
               >
@@ -639,24 +779,7 @@ export default function ProjectId({
             />
           </div>
 
-          {tab === "tour" ? (
-            <TourGrid
-              project={project}
-              tours={tours}
-              refresh={fetchProjectData}
-              encryptedAddress={encryptedAddress}
-            />
-          ) : (
-            <TourSettings
-              formState={formState}
-              project={project}
-              setColor={setColor}
-              setMode={setMode}
-              updateTheme={updateTheme}
-              setOverlay={setOverlay}
-              encryptedAddress={encryptedAddress}
-            />
-          )}
+          {renderTab(tab)}
         </main>
       ) : (
         <main className="p-10">
