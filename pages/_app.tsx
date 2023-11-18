@@ -9,7 +9,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { WagmiConfig, createConfig } from "wagmi";
-import { polygon } from "wagmi/chains";
+import * as chains from "wagmi/chains";
+
 import { ConnectKitProvider, getDefaultConfig, SIWESession } from "connectkit";
 import { siweClient } from "@/constants/siweClient";
 import CongratsDialog from "@/components/CongratsDialog";
@@ -75,7 +76,7 @@ export default function App({
       alchemyId: "CGVa13LLR40MLOYRpnwZmrRNsGnasvtJ", // or infuraId
       walletConnectProjectId: "2df30772655cd76de2f649cf7ad4bc6f",
 
-      chains: [polygon],
+      chains: Object.values(chains), // Allow All Chains
 
       // Required
       appName: "Buildoor",

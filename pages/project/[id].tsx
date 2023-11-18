@@ -452,14 +452,11 @@ function TourAnalytics({ project }: { project: any }) {
   const fetchProjectAnalytics = useCallback(async () => {
     try {
       setLoading(true);
-      const { data: data0 } = await axios.get(
-        API_URL + "/visitor/project/" + project.id
-      );
-      const { data: data1 } = await axios.get(
-        API_URL + "/visitor/project/" + project.id + "/details"
-      );
 
-      console.log({ data0, data1 });
+      const [{ data: data0 }, { data: data1 }] = await Promise.all([
+        axios.get(API_URL + "/visitor/project/" + project.id),
+        axios.get(API_URL + "/visitor/project/" + project.id + "/details"),
+      ]);
 
       setData({ ...data0, ...data1.data });
 
