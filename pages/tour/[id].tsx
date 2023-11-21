@@ -286,8 +286,10 @@ export default function TourId({
                               <b>Timezone</b> {item.location.timezone}
                             </p>
                             <p>
-                              <b>Latitude/Longitude</b> {item.location.ll[0]},{" "}
-                              {item.location.ll[1]}
+                              <b>Latitude/Longitude</b>{" "}
+                              {(item.location.ll && item.location.ll[0]) || "-"}
+                              ,{" "}
+                              {(item.location.ll && item.location.ll[1]) || "-"}
                             </p>
                           </>
                         ) : (

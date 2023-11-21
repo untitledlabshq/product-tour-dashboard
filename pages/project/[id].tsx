@@ -495,45 +495,51 @@ function TourAnalytics({ project }: { project: any }) {
                 <th>IP Address</th>
                 <th>Location</th>
                 <th>Time</th>
+                <th>Tour ID</th>
               </tr>
               {data.details && data.details.length === 0 && (
                 <p className="p-5 gray-text">No visitor data yet</p>
               )}
               {data.details &&
-                data.details.map((item: any) => (
-                  <tr>
-                    <td>{item.IP}</td>
-                    <td>
-                      {item.location ? (
-                        <>
-                          <p>
-                            <b>Country</b> {item.location.country}
-                          </p>
-                          <p>
-                            <b>City</b> {item.location.city}
-                          </p>
-                          <p>
-                            <b>Region</b> {item.location.region}
-                          </p>
-                          <p>
-                            <b>Timezone</b> {item.location.timezone}
-                          </p>
-                          <p>
-                            <b>Latitude/Longitude</b> {item.location.ll[0]},{" "}
-                            {item.location.ll[1]}
-                          </p>
-                        </>
-                      ) : (
-                        "None"
-                      )}
-                    </td>
-                    <td>
-                      {new Date(item.start_time).toDateString() +
-                        " " +
-                        new Date(item.start_time).toLocaleTimeString("en-IN")}
-                    </td>
-                  </tr>
-                ))}
+                data.details
+                  .sort((a: any, b: any) => b.start_time - a.start_time)
+                  .map((item: any) => (
+                    <tr>
+                      <td>{item.IP}</td>
+                      <td>
+                        {item.location ? (
+                          <>
+                            <p>
+                              <b>Country</b> {item.location.country}
+                            </p>
+                            <p>
+                              <b>City</b> {item.location.city}
+                            </p>
+                            <p>
+                              <b>Region</b> {item.location.region}
+                            </p>
+                            <p>
+                              <b>Timezone</b> {item.location.timezone}
+                            </p>
+                            <p>
+                              <b>Latitude/Longitude</b>{" "}
+                              {(item.location.ll && item.location.ll[0]) || "-"}
+                              ,{" "}
+                              {(item.location.ll && item.location.ll[1]) || "-"}
+                            </p>
+                          </>
+                        ) : (
+                          "None"
+                        )}
+                      </td>
+                      <td>
+                        {new Date(item.start_time).toDateString() +
+                          " " +
+                          new Date(item.start_time).toLocaleTimeString("en-IN")}
+                      </td>
+                      <td className="text-sm">{item.tour_id}</td>
+                    </tr>
+                  ))}
             </table>
           </div>
         </>
