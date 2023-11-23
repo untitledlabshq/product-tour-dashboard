@@ -1,4 +1,4 @@
-export const API_URL = "https://product-tour-backend-t3v73.ondigitalocean.app";
+export const API_URL = "https://api.buildoor.xyz";
 // export const API_URL = "http://localhost:8080"
 // export const API_URL = "https://qx9kznq1-8080.inc1.devtunnels.ms"
 
