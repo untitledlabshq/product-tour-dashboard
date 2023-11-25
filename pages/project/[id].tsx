@@ -507,7 +507,9 @@ function TourAnalytics({ project }: { project: any }) {
                     <tr>
                       <td>{item.IP}</td>
                       <td>
-                        {item.location ? (
+                        {item.location &&
+                        item.location.city &&
+                        item.location.country ? (
                           <>
                             {item.location.city}, {item.location.country}
                           </>

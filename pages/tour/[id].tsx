@@ -271,7 +271,9 @@ export default function TourId({
                     <tr>
                       <td>{item.IP}</td>
                       <td>
-                        {item.location ? (
+                        {item.location &&
+                        item.location.city &&
+                        item.location.country ? (
                           <>
                             {item.location.city}, {item.location.country}
                           </>
