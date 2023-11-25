@@ -509,24 +509,7 @@ function TourAnalytics({ project }: { project: any }) {
                       <td>
                         {item.location ? (
                           <>
-                            <p>
-                              <b>Country</b> {item.location.country}
-                            </p>
-                            <p>
-                              <b>City</b> {item.location.city}
-                            </p>
-                            <p>
-                              <b>Region</b> {item.location.region}
-                            </p>
-                            <p>
-                              <b>Timezone</b> {item.location.timezone}
-                            </p>
-                            <p>
-                              <b>Latitude/Longitude</b>{" "}
-                              {(item.location.ll && item.location.ll[0]) || "-"}
-                              ,{" "}
-                              {(item.location.ll && item.location.ll[1]) || "-"}
-                            </p>
+                            {item.location.city}, {item.location.country}
                           </>
                         ) : (
                           "None"
