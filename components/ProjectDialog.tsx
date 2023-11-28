@@ -18,7 +18,7 @@ import PrimaryButton from "./PrimaryButton";
 import PlusIcon from "@/assets/icons/Plus.svg";
 import { toast } from "react-toastify";
 import useConnect from "@/hooks/useConnect";
-import { useRouter } from "next/router";
+import upperFirst from "lodash/upperFirst";
 
 type Props = {
   onCreate?: Function;
@@ -67,9 +67,13 @@ export default function ProjectDialog({ onCreate, encryptedAddress }: Props) {
       toast.dismiss(toastId);
 
       onCreate?.();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      toast.error("Error creating a new project");
+      toast.error(
+        e.response.data
+          ? upperFirst(e.response.data.toLowerCase())
+          : "Error creating a new project"
+      );
     } finally {
       setOpen(false);
       setFormData({

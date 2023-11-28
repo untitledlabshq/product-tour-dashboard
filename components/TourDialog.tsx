@@ -18,6 +18,7 @@ import PrimaryButton from "./PrimaryButton";
 import PlusIcon from "@/assets/icons/Plus.svg";
 import { toast } from "react-toastify";
 import useConnect from "@/hooks/useConnect";
+import upperFirst from "lodash/upperFirst";
 
 type Props = {
   onCreate?: Function;
@@ -67,9 +68,13 @@ export default function TourDialog({ onCreate, encryptedAddress }: Props) {
       toast.success("Created a new tour!");
 
       onCreate?.();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      toast.error("Error creating a new tour");
+      toast.error(
+        e.response.data
+          ? upperFirst(e.response.data.toLowerCase())
+          : "Error creating a new tour"
+      );
     } finally {
       setOpen(false);
       setFormData({
