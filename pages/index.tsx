@@ -10,6 +10,7 @@ import { useAccount } from "wagmi";
 import bgImage from "@/assets/bg.png";
 import Link from "next/link";
 import CustomConnectButton from "@/components/CustomConnectButton";
+import PleaConnectButton from "@/components/PlenaConnectButton";
 import googleIcon from "@/assets/google.png";
 
 export default function Home() {
@@ -100,6 +101,7 @@ export default function Home() {
                     </span>
                   </button>
                   <CustomConnectButton />
+                  <PleaConnectButton />
                 </div>
                 <div className="mt-5 w-full text-primary-gray text-center">
                   or

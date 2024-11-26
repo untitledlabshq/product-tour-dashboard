@@ -12,7 +12,7 @@ function CustomConnectButton() {
   if (!isConnected) {
     return (
       <button
-        className="flex justify-center items-center space-x-2 p-3 rounded-xl border border-primary-gray w-full"
+        className="flex justify-center items-center space-x-2 p-3 mb-3 rounded-xl border border-primary-gray w-full"
         onClick={() => openSIWE()}
       >
         <img src={metamaskIcon.src} alt="MetaMask Logo" width={24} />
@@ -22,7 +22,7 @@ function CustomConnectButton() {
   } else if (isConnected && !isSignedIn && address) {
     return (
       <button
-        className="flex justify-center items-center space-x-2 p-3 rounded-xl border border-orange-300 w-full"
+        className="flex justify-center items-center space-x-2 p-3 mb-3 rounded-xl border border-orange-300 w-full"
         onClick={() => openSIWE()}
       >
         <img src={metamaskIcon.src} alt="MetaMask Logo" width={24} />
