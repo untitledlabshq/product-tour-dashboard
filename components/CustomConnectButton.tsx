@@ -1,6 +1,6 @@
 import { useAccount, useConnect } from "wagmi";
 import SIWEButton from "./SIWEButton";
-import metamaskIcon from "@/assets/metamask.svg";
+import plenaIcon from "@/assets/plena.svg";
 import { useModal, useSIWE } from "connectkit";
 import { shortAddress } from "@/utils";
 
@@ -15,7 +15,7 @@ function CustomConnectButton() {
         className="flex justify-center items-center space-x-2 p-3 mb-3 rounded-xl border border-primary-gray w-full"
         onClick={() => openSIWE()}
       >
-        <img src={metamaskIcon.src} alt="MetaMask Logo" width={24} />
+        <img src={plenaIcon.src} alt="MetaMask Logo" width={24} />
         <span className="font-semibold text-sm">Login via Wallet</span>
       </button>
     );

@@ -1,36 +1,107 @@
+import "@rainbow-me/rainbowkit/styles.css";
 import { useAppStore } from "@/store";
 import "@/styles/globals.css";
 import { supabase } from "@/utils/client";
 import type { AppProps } from "next/app";
 import { Montserrat } from "next/font/google";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { WagmiConfig, createConfig } from "wagmi";
+import { rainbowWallet } from "@rainbow-me/rainbowkit/wallets";
+import { WagmiProvider, createConfig, http } from "wagmi";
 import * as chains from "wagmi/chains";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { ConnectKitProvider, getDefaultConfig, SIWESession } from "connectkit";
+import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { siweClient } from "@/constants/siweClient";
 import CongratsDialog from "@/components/CongratsDialog";
 import NavigationLoader from "@/components/NavigationLoader";
 import { ConnectKitCustomTheme } from "@/constants";
-import { GetServerSideProps } from "next";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useSearchParams } from "next/navigation";
+import {
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
+import { rainbowPlenaConnector } from "@/lib/pleaConfigConnect";
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
 });
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Recommended",
+      wallets: [
+        /// UNCOMMENT IT TO ADD PLENA WALLET
+        // rainbowPlenaConnector, 
+        rainbowWallet
+      ],
+    },
+  ],
+  {
+    appName: "Buildoor",
+    appUrl: "https://product-tour-dashboard.vercel.app/",
+    appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg",
+    projectId: "2df30772655cd76de2f649cf7ad4bc6f",
+  }
+);
+// Create wagmi config
+const config = createConfig({
+  wallet: [rainbowWallet],
+  ...getDefaultConfig({
+    // Required API Keys
+    // alchemyId: "CGVa13LLR40MLOYRpnwZmrRNsGnasvtJ",
+    walletConnectProjectId: "2df30772655cd76de2f649cf7ad4bc6f",
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  console.log("Running on the server!");
-  return {
-    props: {},
-  };
-};
+    chains: Object.values(chains),
+
+    // Required
+    appName: "Buildoor",
+
+    // Optional
+    appDescription: "Product Tour",
+    appUrl: "https://product-tour-dashboard.vercel.app/",
+    appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg",
+
+    // Add required v2 configurations
+    // transports: {
+    //   [mainnet.id]: http(),
+    //   [sepolia.id]: http(),
+    // },
+  }),
+});
+
+function Providers({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient());
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider config={config}>
+        <RainbowKitProvider>
+          <siweClient.Provider
+            enabled={true}
+            nonceRefetchInterval={300000}
+            sessionRefetchInterval={300000}
+            signOutOnDisconnect={true}
+            signOutOnAccountChange={true}
+            signOutOnNetworkChange={true}
+          >
+            <ConnectKitProvider
+              theme="midnight"
+              customTheme={ConnectKitCustomTheme}
+            >
+              {children}
+            </ConnectKitProvider>
+          </siweClient.Provider>
+        </RainbowKitProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default function App({
   Component,
@@ -70,31 +141,6 @@ export default function App({
     }
   }, []);
 
-  const config = createConfig(
-    getDefaultConfig({
-      // Required API Keys
-      alchemyId: "CGVa13LLR40MLOYRpnwZmrRNsGnasvtJ", // or infuraId
-      walletConnectProjectId: "2df30772655cd76de2f649cf7ad4bc6f",
-
-      chains: Object.values(chains), // Allow All Chains
-
-      // Required
-      appName: "Buildoor",
-
-      // Optional
-      appDescription: "Product Tour",
-      appUrl: "https://product-tour-dashboard.vercel.app/", // your app's url
-      appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg", // your app's icon, no bigger than 1024x1024px (max. 1MB)
-    })
-  );
-
-  // If page layout is available, use it. Else return the page
-  // const getLayout =
-  // // @ts-ignore
-  //   Component.getLayout === true
-  //     ? (page: any) => <Layout>{page}</Layout>
-  //     : (page: any) => page;
-
   return (
     <>
       <Head>
@@ -103,37 +149,22 @@ export default function App({
 
       <NavigationLoader />
 
-      <WagmiConfig config={config}>
-        <siweClient.Provider
-          // Optional parameters
-          enabled={true} // defaults true
-          nonceRefetchInterval={300000} // in milliseconds, defaults to 5 minutes
-          sessionRefetchInterval={300000} // in milliseconds, defaults to 5 minutes
-          signOutOnDisconnect={true} // defaults true
-          signOutOnAccountChange={true} // defaults true
-          signOutOnNetworkChange={true} // defaults true
+      <Providers>
+        <SessionContextProvider
+          supabaseClient={supabase}
+          initialSession={pageProps.initialSession}
         >
-          <ConnectKitProvider
-            theme="midnight"
-            customTheme={ConnectKitCustomTheme}
+          <article
+            className={
+              "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
+              montserrat.className
+            }
           >
-            <SessionContextProvider
-              supabaseClient={supabase}
-              initialSession={pageProps.initialSession}
-            >
-              <article
-                className={
-                  "min-h-screen bg-neutral-50 dark:bg-primary-dark dark:text-white " +
-                  montserrat.className
-                }
-              >
-                {/* {getLayout(<Component {...pageProps} />)} */}
-                <Component {...pageProps} />
-              </article>
-            </SessionContextProvider>
-          </ConnectKitProvider>
-        </siweClient.Provider>
-      </WagmiConfig>
+            <Component {...pageProps} />
+          </article>
+        </SessionContextProvider>
+      </Providers>
+
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
