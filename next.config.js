@@ -8,7 +8,7 @@ const nextConfig = {
     AES_ALGO: "aes-256-cbc",
   },
   experimental: {
-    // esmExternals: true,
+    esmExternals: 'loose',
     // topLevelAwait: true,
     // asyncWebAssembly: true
   },

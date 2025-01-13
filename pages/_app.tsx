@@ -21,62 +21,66 @@ import NavigationLoader from "@/components/NavigationLoader";
 import { ConnectKitCustomTheme } from "@/constants";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useSearchParams } from "next/navigation";
-import {
-  RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
-import { rainbowPlenaConnector } from "@/lib/pleaConfigConnect";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
 });
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: "Recommended",
-      wallets: [
-        /// UNCOMMENT IT TO ADD PLENA WALLET
-        // rainbowPlenaConnector, 
-        rainbowWallet
-      ],
-    },
-  ],
-  {
-    appName: "Buildoor",
-    appUrl: "https://product-tour-dashboard.vercel.app/",
-    appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg",
-    projectId: "2df30772655cd76de2f649cf7ad4bc6f",
-  }
-);
-// Create wagmi config
-const config = createConfig({
-  wallet: [rainbowWallet],
-  ...getDefaultConfig({
-    // Required API Keys
-    // alchemyId: "CGVa13LLR40MLOYRpnwZmrRNsGnasvtJ",
-    walletConnectProjectId: "2df30772655cd76de2f649cf7ad4bc6f",
-
-    chains: Object.values(chains),
-
-    // Required
-    appName: "Buildoor",
-
-    // Optional
-    appDescription: "Product Tour",
-    appUrl: "https://product-tour-dashboard.vercel.app/",
-    appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg",
-
-    // Add required v2 configurations
-    // transports: {
-    //   [mainnet.id]: http(),
-    //   [sepolia.id]: http(),
-    // },
-  }),
-});
 
 function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
+  const [config, setConfig] = useState<any>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      // Dynamically import the connector code
+      const { rainbowPlenaConnector } = await import("@/lib/pleaConfigConnect");
+      
+      const connectors = connectorsForWallets(
+        [
+          {
+            groupName: "Recommended",
+            wallets: [
+              rainbowPlenaConnector,
+              rainbowWallet
+            ],
+          },
+        ],
+        {
+          appName: "Buildoor",
+          appUrl: "https://product-tour-dashboard.vercel.app/",
+          appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg",
+          projectId: "2df30772655cd76de2f649cf7ad4bc6f",
+        }
+      );
+
+      const wagmiConfig = createConfig({
+        ...getDefaultConfig({
+          connectors,
+          walletConnectProjectId: "2df30772655cd76de2f649cf7ad4bc6f",
+          //@ts-ignore
+          chains: Object.values(chains),
+          appName: "Buildoor",
+          appDescription: "Product Tour",
+          appUrl: "https://product-tour-dashboard.vercel.app/",
+          appIcon: "https://product-tour-dashboard.vercel.app/icon.jpg",
+        }),
+      });
+      
+      if (isMounted) setConfig(wagmiConfig);
+    })();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!config) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -111,7 +115,6 @@ export default function App({
 }>) {
   const store = useAppStore();
   const { setCongrats } = useAppStore();
-
   const queryParams = useSearchParams();
 
   useEffect(() => {
@@ -125,11 +128,8 @@ export default function App({
     }
 
     if (store.session) {
-      // Check if session is expired, get new one
       supabase.auth.getSession().then(async (data) => {
         const expiresAt = data.data.session?.expires_at!;
-
-        // Consider expiry as half of expiresAt time since it somehow stops working beforehand
         const hasExpired =
           new Date().getTime() > new Date((expiresAt * 1000) / 2).getTime();
 
