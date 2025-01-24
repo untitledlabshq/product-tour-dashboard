@@ -11,7 +11,7 @@ import bgImage from "@/assets/bg.png";
 import Link from "next/link";
 import CustomConnectButton from "@/components/CustomConnectButton";
 import googleIcon from "@/assets/google.png";
-
+import SignMessageModal from "@/components/SIgnMessageModel";
 export default function Home() {
   const { session, setSession } = useAppStore();
 
