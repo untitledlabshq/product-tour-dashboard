@@ -12,10 +12,11 @@ import useUserData from "@/hooks/useUserData";
 import { API_URL } from "@/constants";
 import { Button } from "./ui/button";
 import { toast } from "react-toastify";
-
+import { usePlenaSigning } from "@/hooks/usePlenaSigning";
 export default function Navbar() {
   const { session, setSession } = useAppStore();
   const { isSignedIn, data } = useSIWE();
+  const { PlenaSignedIn } = usePlenaSigning();
   const { address, status, isConnected } = useAccount();
   const router = useRouter();
 
@@ -28,9 +29,10 @@ export default function Navbar() {
   useEffect(() => {
     // setMounted(true);
     if (
-      typeof window !== "undefined" &&
-      ((!session && !isSignedIn && status !== "reconnecting") ||
-        (isSignedIn && (!data || data?.address !== address)))
+      (typeof window !== "undefined" &&
+        ((!session && !isSignedIn && status !== "reconnecting") ||
+          (isSignedIn && (!data || data?.address !== address)))) ||
+      PlenaSignedIn
     ) {
       router.push("/");
     }

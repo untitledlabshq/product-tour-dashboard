@@ -6,6 +6,9 @@ import { useState } from "react";
 import { ethers } from "ethers";
 import { hashMessage } from "@/utils/utilities";
 import { eip1271 } from "@/utils/eip1271";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { usePlenaSigning } from "@/hooks/usePlenaSigning";
 
 function CustomConnectButton() {
   // const { isSignedIn } = useSIWE();
@@ -19,7 +22,10 @@ function CustomConnectButton() {
   const [pending, setPending] = useState(false);
   const [isSignModalOpen, setIsSignModalOpen] = useState(false);
   const [result, setResult] = useState(null);
-
+  const router = useRouter();
+  const { isSignedIn } = useSIWE();
+  const { openSIWE } = useModal();
+  const { signTrx } = usePlenaSigning();
   const openSignModal = () => {
     setIsSignModalOpen(true);
   };
@@ -34,50 +40,6 @@ function CustomConnectButton() {
     return hex;
   };
 
-  const signTrx = async () => {
-    openSignModal();
-    setPending(true);
-    try {
-      const message = `My email is john@doe.com - ${new Date().toUTCString()}`;
-      const hexMsg = utf8ToHex(message);
-      const msgParams = [hexMsg, walletAddress];
-      
-      // @ts-ignore
-      const res = await connector.sendPlenaTransaction({
-        chain: 137,
-        method: "personal_sign",
-        params: [
-         msgParams
-        ],
-      });
-      console.log(res);
-      if (!res?.success) {
-        setResult(false);
-        return;
-      }
-      const hash = hashMessage(message);
-      const polygonProvider = new ethers.JsonRpcProvider(
-        "https://polygon-rpc.com/"
-      );
-      const valid = await eip1271.isValidSignature(
-        walletAddress,
-        res?.content?.signature,
-        hash,
-        polygonProvider
-      );
-      const formattedResult = {
-        method: 'personal_sign',
-        signature: res?.content?.signature,
-        from: walletAddress,
-      };
-      setResult(formattedResult);
-    } catch (error) {
-      console.log("error", error);
-      setResult(null);
-    } finally {
-      setPending(false);
-    }
-  }
   return (
     <ConnectButton.Custom>
       {({
@@ -111,7 +73,7 @@ function CustomConnectButton() {
         if (isConnected &&  account.address) {
           return (
             <button
-              onClick={() => signTrx()}
+              onClick={() => connector && connector.sendPlenaTransaction ? signTrx(connector, walletAddress) : openSIWE()}
               className="flex justify-center items-center space-x-2 p-3 mb-3 rounded-xl border border-orange-300 w-full"
             >
               {/* 
