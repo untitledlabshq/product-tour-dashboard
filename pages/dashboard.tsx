@@ -64,6 +64,7 @@ function Dashboard({
   projectsWeb3,
   encryptedAddress,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.debug("dashboard")
   const store = useAppStore();
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState("");
