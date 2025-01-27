@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.2",
     "@json2csv/plainjs": "^7.0.3",
     "@plenaconnect/provider": "^0.3.6",
     "@plenaconnect/wagmi-connector": "^0.1.4",
@@ -29,6 +30,8 @@
     "@types/react": "18.2.13",
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "18.2.6",
+    "alchemy-sdk": "^3.5.1",
+    "antd": "^5.23.2",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.1",
@@ -37,7 +40,7 @@
     "connectkit-next-siwe": "^0.2.0",
     "copy-to-clipboard": "^3.3.3",
     "dompurify": "^3.0.4",
-    "ethers": "^6.7.1",
+    "ethers": "^6.13.5",
     "lodash": "^4.17.21",
     "lucide-react": "^0.256.0",
     "next": "13.4.6",

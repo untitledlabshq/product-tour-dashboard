@@ -62,7 +62,7 @@ function Providers({ children }: { children: React.ReactNode }) {
           connectors,
           walletConnectProjectId: "2df30772655cd76de2f649cf7ad4bc6f",
           //@ts-ignore
-          chains: Object.values(chains),
+          chains: [chains.polygon],
           appName: "Buildoor",
           appDescription: "Product Tour",
           appUrl: "https://product-tour-dashboard.vercel.app/",

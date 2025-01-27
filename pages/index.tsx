@@ -11,12 +11,12 @@ import bgImage from "@/assets/bg.png";
 import Link from "next/link";
 import CustomConnectButton from "@/components/CustomConnectButton";
 import googleIcon from "@/assets/google.png";
-
+import { usePlenaSigning } from "@/hooks/usePlenaSigning";
 export default function Home() {
   const { session, setSession } = useAppStore();
 
   const { isSignedIn, data } = useSIWE();
-
+  const { PlenaSignedIn } = usePlenaSigning();
   const [mounted, setMounted] = useState(false);
 
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function Home() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
 
-      if (!session) {
+      if (!session || PlenaSignedIn) {
         router.push("/");
       }
     });
